@@ -1,6 +1,6 @@
 import Foundation
 
-public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
+public struct HStack<Content: View>: View, PrimitiveView, ViewContainer {
     public let content: Content
 
     public init(@ItemBuilder _ content: () -> Content) {
@@ -15,13 +15,13 @@ public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
 
     func loadData(node: Node) {
         for i in 0 ..< node.children[0].size {
-            (node.control as! VStackControl).addSubview(node.children[0].control(at: i), at: i)
+            (node.control as! HStackControl).addSubview(node.children[0].control(at: i), at: i)
         }
     }
 
     func buildNode(_ node: Node) {
         node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
-        node.control = VStackControl()
+        node.control = HStackControl()
     }
 
     func updateNode(_ node: Node) {
@@ -30,35 +30,35 @@ public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
     }
 
     func insertControl(at index: Int, node: Node) {
-        (node.control as! VStackControl).addSubview(node.control(at: index), at: index)
+        (node.control as! HStackControl).addSubview(node.control(at: index), at: index)
     }
 
     func removeControl(at index: Int, node: Node) {
-        (node.control as! VStackControl).removeSubview(at: index)
+        (node.control as! HStackControl).removeSubview(at: index)
     }
 
 }
 
-private class VStackControl: Control {
+private class HStackControl: Control {
     override func size(proposedSize: Size) -> Size {
         var size: Size = .zero
         for view in children {
-            size.width = max(size.width, view.size(proposedSize: proposedSize).width)
-            size.height += view.size(proposedSize: proposedSize).height
+            size.height = max(size.height, view.size(proposedSize: proposedSize).height)
+            size.width += view.size(proposedSize: proposedSize).width
         }
         return size
     }
     override func layout(size: Size) {
         var size: Size = .zero
         for view in children {
-            view.layer.frame.position = Position(column: 0, line: size.height)
+            view.layer.frame.position = Position(column: size.width, line: 0)
             view.layout(size: view.size(proposedSize: size))
-            size.width = max(size.width, view.layer.frame.size.width)
-            size.height += view.layer.frame.size.height
+            size.height = max(size.height, view.layer.frame.size.height)
+            size.width += view.layer.frame.size.width
         }
         self.layer.frame.size = size
     }
-    override func selectableElement(below index: Int) -> Control? {
+    override func selectableElement(rightOf index: Int) -> Control? {
         var index = index + 1
         while index < children.count {
             if let element = children[index].firstSelectableElement {
@@ -66,9 +66,9 @@ private class VStackControl: Control {
             }
             index += 1
         }
-        return super.selectableElement(below: index)
+        return super.selectableElement(rightOf: index)
     }
-    override func selectableElement(above index: Int) -> Control? {
+    override func selectableElement(leftOf index: Int) -> Control? {
         var index = index - 1
         while index >= 0 {
             if let element = children[index].firstSelectableElement {
@@ -76,6 +76,6 @@ private class VStackControl: Control {
             }
             index -= 1
         }
-        return super.selectableElement(above: index)
+        return super.selectableElement(leftOf: index)
     }
 }

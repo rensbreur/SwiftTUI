@@ -79,5 +79,7 @@ class Control {
 
     func selectableElement(below index: Int) -> Control? { parent?.selectableElement(below: self.index) }
     func selectableElement(above index: Int) -> Control? { parent?.selectableElement(above: self.index) }
+    func selectableElement(rightOf index: Int) -> Control? { parent?.selectableElement(rightOf: self.index) }
+    func selectableElement(leftOf index: Int) -> Control? { parent?.selectableElement(leftOf: self.index) }
 
 }

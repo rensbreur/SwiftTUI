@@ -75,6 +75,18 @@ public class Application<I: View> {
                     window.firstResponder = next
                     window.firstResponder?.becomeFirstResponder()
                 }
+            } else if key == .right {
+                if let next = window.firstResponder?.selectableElement(rightOf: 0) {
+                    window.firstResponder?.resignFirstResponder()
+                    window.firstResponder = next
+                    window.firstResponder?.becomeFirstResponder()
+                }
+            } else if key == .left {
+                if let next = window.firstResponder?.selectableElement(leftOf: 0) {
+                    window.firstResponder?.resignFirstResponder()
+                    window.firstResponder = next
+                    window.firstResponder?.becomeFirstResponder()
+                }
             }
         } else if char == 4 {
             renderer.stop()
