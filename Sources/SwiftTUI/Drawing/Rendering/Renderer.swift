@@ -81,8 +81,8 @@ class Renderer {
         write("\u{1b}[2J")
     }
 
-    private func saveScreen() {
-        write("\u{1b}[?47h")
+    private func enableAlternateBuffer() {
+        write("\u{1b}[?1049h")
     }
 
     private func hideCursor() {
@@ -105,8 +105,8 @@ class Renderer {
         write("\u{1b}[\(position.line + 1);\(position.column + 1)H")
     }
 
-    private func restoreScreen() {
-        write("\u{1b}[?47l")
+    private func disableAlternateBuffer() {
+        write("\u{1b}[?1049l")
     }
 
     private func write(_ str: String) {
