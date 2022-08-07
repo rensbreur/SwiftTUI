@@ -7,6 +7,10 @@ public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
         self.content = content()
     }
 
+    init(content: Content) {
+        self.content = content
+    }
+
     static var size: Int? { 1 }
 
     func loadData(node: Node) {

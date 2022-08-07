@@ -8,19 +8,19 @@ public class Application<I: View> {
     }
 
     public func start() {
-        let node = Node(viewWrapper: ViewWrapper(view: VStack { rootView }))
+        let node = Node(viewWrapper: ViewWrapper(view: VStack(content: rootView)))
         node.build()
 
-        let view = node.control!
+        let control = node.control!
 
         let window = Window()
         window.layer.frame.size = Size(width: 100, height: 50)
-        window.addControl(view)
+        window.addControl(control)
 
-        window.firstResponder = view.firstSelectableElement
+        window.firstResponder = control.firstSelectableElement
         window.firstResponder?.becomeFirstResponder()
 
-        view.layout(size: Size(width: 100, height: 50))
+        control.layout(size: Size(width: 100, height: 50))
         let renderer = Renderer(layer: window.layer)
         renderer.draw()
 
