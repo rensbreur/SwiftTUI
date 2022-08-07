@@ -69,7 +69,11 @@ public class Application<I: View> {
     private func setInputMode() {
         var tattr = termios()
         tcgetattr(STDIN_FILENO, &tattr)
+#if os(Linux)
+        tattr.c_lflag &= ~UInt32(ECHO | ICANON)
+#else
         tattr.c_lflag &= ~UInt(ECHO | ICANON)
+#endif
         tcsetattr(STDIN_FILENO, TCSAFLUSH, &tattr);
     }
 

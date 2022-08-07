@@ -110,6 +110,12 @@ class Renderer {
     }
 
     private func write(_ str: String) {
-        str.withCString { _ = Darwin.write(STDOUT_FILENO, $0, strlen($0)) }
+        str.withCString {
+#if os(Linux)
+            _ = Glibc.write(STDOUT_FILENO, $0, strlen($0))
+#else
+            _ = Darwin.write(STDOUT_FILENO, $0, strlen($0))
+#endif
+        }
     }
 }
