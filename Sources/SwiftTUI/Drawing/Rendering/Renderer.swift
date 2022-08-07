@@ -7,7 +7,7 @@ class Renderer {
     /// drawing is currently still slow, as it involves moving the cursor
     /// position and printing a character there.
     /// This cache stores the screen content to see if printing is necessary.
-    private var cache: [[Cell]]
+    private var cache: [[Cell?]] = []
 
     /// The current cursor position, which might need to be updated before
     /// printing.
@@ -18,8 +18,7 @@ class Renderer {
 
     init(layer: Layer) {
         self.layer = layer
-        let cell = Cell(char: " ")
-        cache = .init(repeating: .init(repeating: cell, count: layer.frame.size.width), count: layer.frame.size.height)
+        setCache()
         setup()
     }
 
@@ -30,6 +29,10 @@ class Renderer {
             draw(rect: invalidated)
             layer.invalidated = nil
         }
+    }
+
+    func setCache() {
+        cache = .init(repeating: .init(repeating: nil, count: layer.frame.size.width), count: layer.frame.size.height)
     }
 
     /// Draw a specific area, or the entire layer if the area is nil.
@@ -52,6 +55,10 @@ class Renderer {
     }
 
     private func drawPixel(_ cell: Cell, at position: Position) {
+        guard position.column >= 0, position.line >= 0, position.column < layer.frame.size.width, position.line < layer.frame.size.height else {
+            log("Attempted to draw at \(position) outside of layer area \(layer.frame.size)")
+            return
+        }
         if cache[position.line][position.column] != cell {
             cache[position.line][position.column] = cell
             if self.currentPosition != position {

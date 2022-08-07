@@ -10,10 +10,12 @@ class Layer {
 
     weak var renderer: Renderer?
 
-    var frame: Rect = Rect(column: 0, line: 0, width: 100, height: 100) {
+    var frame: Rect = .zero {
         didSet {
-            parent?.invalidate(rect: oldValue)
-            parent?.invalidate(rect: frame)
+            if oldValue != frame {
+                parent?.invalidate(rect: oldValue)
+                parent?.invalidate(rect: frame)
+            }
         }
     }
 

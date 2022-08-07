@@ -98,6 +98,7 @@ public class Application<I: View> {
 
     private func handleWindowSizeChange() {
         updateWindowSize()
+        control.layer.invalidate()
         runLoopCycleEnd()
     }
 
@@ -108,6 +109,7 @@ public class Application<I: View> {
             return
         }
         window.layer.frame.size = Size(width: Int(size.ws_col), height: Int(size.ws_row))
+        renderer.setCache()
     }
 
 }
