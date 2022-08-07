@@ -26,6 +26,7 @@ class Renderer {
     /// Draw only the invalidated part of the layer.
     func update() {
         if let invalidated = layer.invalidated {
+            log("Drawing invalidated area \(invalidated)")
             draw(rect: invalidated)
             layer.invalidated = nil
         }

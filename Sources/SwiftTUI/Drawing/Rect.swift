@@ -1,6 +1,6 @@
 import Foundation
 
-struct Rect {
+struct Rect: Equatable, CustomStringConvertible {
     var position: Position
     var size: Size
 
@@ -25,4 +25,7 @@ struct Rect {
     var minColumn: Int { position.column }
     var maxLine: Int { position.line + size.height - 1 }
     var maxColumn: Int { position.column + size.width - 1 }
+
+    var description: String { "\(position) \(size)" }
+
 }
