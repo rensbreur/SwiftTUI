@@ -46,7 +46,7 @@ class Renderer {
     }
 
     func stop() {
-        restoreScreen()
+        disableAlternateBuffer()
         showCursor()
     }
 
@@ -71,7 +71,7 @@ class Renderer {
     }
 
     private func setup() {
-        saveScreen()
+        enableAlternateBuffer()
         clearScreen()
         moveTo(currentPosition)
         hideCursor()
