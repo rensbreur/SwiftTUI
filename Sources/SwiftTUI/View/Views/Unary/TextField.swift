@@ -41,12 +41,10 @@ private class TextFieldControl: Control {
     }
 
     override func cell(at position: Position) -> Cell? {
-        let foreground: Color = .white
-        let background: Color = .black
         guard position.line == 0 else { return nil }
-        if position.column == text.count, rootWindow?.firstResponder === self { return Cell(char: "_", foregroundColor: foreground, backgroundColor: background) }
+        if position.column == text.count, rootWindow?.firstResponder === self { return Cell(char: "_") }
         guard position.column < text.count else { return .init(char: " ") }
-        return .init(char: text[text.index(text.startIndex, offsetBy: position.column)], foregroundColor: foreground, backgroundColor: background)
+        return Cell(char: text[text.index(text.startIndex, offsetBy: position.column)])
     }
 
     override var selectable: Bool { true }

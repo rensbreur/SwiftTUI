@@ -46,11 +46,11 @@ private class ButtonControl: Control {
     }
 
     override func cell(at position: Position) -> Cell? {
-        let foreground: Color = rootWindow?.firstResponder === self ? .black : .white
-        let background: Color = rootWindow?.firstResponder === self ? .white : .black
         guard position.line == 0 else { return nil }
         guard position.column < text.count else { return .init(char: " ") }
-        return .init(char: text[text.index(text.startIndex, offsetBy: position.column)], foregroundColor: foreground, backgroundColor: background)
+        var cell = Cell(char: text[text.index(text.startIndex, offsetBy: position.column)])
+        cell.inverted = rootWindow?.firstResponder === self
+        return cell
     }
 
     override var selectable: Bool { true }

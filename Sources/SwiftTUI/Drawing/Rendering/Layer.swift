@@ -50,6 +50,7 @@ class Layer {
 
     func cell(at position: Position) -> Cell? {
         var char: Character? = nil
+        var inverted: Bool = false
         var foregroundColor: Color? = nil
         var backgroundColor: Color? = nil
 
@@ -58,7 +59,11 @@ class Layer {
             let position = Position(column: position.column - child.frame.position.column, line: position.line - child.frame.position.line)
             guard position.line >= 0, position.column >= 0, position.column < child.frame.size.width, position.line < child.frame.size.height else { continue }
             if let cell = child.cell(at: position) {
-                if char == nil { char = cell.char; foregroundColor = cell.foregroundColor }
+                if char == nil {
+                    char = cell.char
+                    inverted = cell.inverted
+                    foregroundColor = cell.foregroundColor
+                }
                 if let color = cell.backgroundColor { backgroundColor = color }
                 if char != nil && backgroundColor != nil { break }
             }
@@ -68,12 +73,13 @@ class Layer {
         if (char == nil || backgroundColor == nil), let cell = content?.cell(at: position) {
             if char == nil {
                 char = cell.char
+                inverted = cell.inverted
                 foregroundColor = cell.foregroundColor
             }
             if backgroundColor == nil, let color = cell.backgroundColor { backgroundColor = color }
         }
 
-        return char.map { Cell(char: $0, foregroundColor: foregroundColor, backgroundColor: backgroundColor) }
+        return char.map { Cell(char: $0, foregroundColor: foregroundColor ?? .default, backgroundColor: backgroundColor, inverted: inverted) }
     }
 
 }

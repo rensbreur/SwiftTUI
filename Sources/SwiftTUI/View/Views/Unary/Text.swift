@@ -38,6 +38,6 @@ private class TextControl: Control {
     override func cell(at position: Position) -> Cell? {
         guard position.line == 0 else { return nil }
         guard position.column < text.count else { return .init(char: " ") }
-        return Cell(char: text[text.index(text.startIndex, offsetBy: position.column)], foregroundColor: .white)
+        return Cell(char: text[text.index(text.startIndex, offsetBy: position.column)])
     }
 }

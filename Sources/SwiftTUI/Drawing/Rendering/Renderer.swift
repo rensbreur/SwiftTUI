@@ -16,6 +16,8 @@ class Renderer {
     private var currentForegroundColor: Color? = nil
     private var currentBackgroundColor: Color? = nil
 
+    private var currentlyInverted: Bool = false
+
     init(layer: Layer) {
         self.layer = layer
         setCache()
@@ -66,12 +68,18 @@ class Renderer {
                 self.currentPosition = position
             }
             if self.currentForegroundColor != cell.foregroundColor {
-                setForegroundColor(cell.foregroundColor ?? .white)
+                setForegroundColor(cell.foregroundColor)
                 self.currentForegroundColor = cell.foregroundColor
             }
-            if self.currentBackgroundColor != cell.backgroundColor {
-                setBackgroundColor(cell.backgroundColor ?? .black)
-                self.currentBackgroundColor = cell.backgroundColor
+            let backgroundColor = cell.backgroundColor ?? .default
+            if self.currentBackgroundColor != backgroundColor {
+                setBackgroundColor(backgroundColor)
+                self.currentBackgroundColor = backgroundColor
+            }
+            if self.currentlyInverted != cell.inverted {
+                if cell.inverted { enableInverted() }
+                else { disableInverted() }
+                self.currentlyInverted = cell.inverted
             }
             write(String(cell.char))
             self.currentPosition.column += 1
@@ -111,6 +119,14 @@ class Renderer {
 
     private func moveTo(_ position: Position) {
         write("\u{1b}[\(position.line + 1);\(position.column + 1)H")
+    }
+
+    private func enableInverted() {
+        write("\u{1b}[7m")
+    }
+
+    private func disableInverted() {
+        write("\u{1b}[27m")
     }
 
     private func disableAlternateBuffer() {
