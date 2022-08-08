@@ -4,7 +4,7 @@ class Layer {
     private(set) var children: [Layer] = []
     private(set) var parent: Layer?
 
-    weak var control: Control?
+    weak var content: LayerDrawing?
 
     var invalidated: Rect?
 
@@ -64,8 +64,8 @@ class Layer {
             }
         }
 
-        // Draw control's content as background
-        if (char == nil || backgroundColor == nil), let cell = control?.cell(at: position) {
+        // Draw layer content as background
+        if (char == nil || backgroundColor == nil), let cell = content?.cell(at: position) {
             if char == nil {
                 char = cell.char
                 foregroundColor = cell.foregroundColor

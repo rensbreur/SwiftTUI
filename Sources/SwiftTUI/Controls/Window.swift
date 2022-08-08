@@ -1,7 +1,7 @@
 import Foundation
 
-class Window {
-    private(set) lazy var layer: Layer = { makeLayer() }()
+class Window: LayerDrawing {
+    private(set) lazy var layer: Layer = makeLayer()
 
     private(set) var controls: [Control] = []
 
@@ -13,19 +13,13 @@ class Window {
         layer.addLayer(control.layer, at: 0)
     }
 
-    func makeLayer() -> Layer {
+    private func makeLayer() -> Layer {
         let layer = Layer()
-        let background = WindowBackgroundLayer()
-        layer.frame.size = Size(width: 100, height: 50)
-        background.frame.size = layer.frame.size
-        layer.addLayer(background, at: 0)
+        layer.content = self
         return layer
     }
 
-}
-
-private class WindowBackgroundLayer: Layer {
-    override func cell(at position: Position) -> Cell? {
+    func cell(at position: Position) -> Cell? {
         Cell(char: " ")
     }
 }
