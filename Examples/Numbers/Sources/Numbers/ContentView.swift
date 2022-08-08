@@ -5,12 +5,8 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            Button("More") {
-                counter += 1
-            }
-            Button("Less") {
-                counter -= 1
-            }
+            Button("More") { counter += 1 }
+            Button("Less") { counter -= 1 }
             HStack {
                 if counter > 0 {
                     ForEach(1 ... counter, id: \.self) { i in
