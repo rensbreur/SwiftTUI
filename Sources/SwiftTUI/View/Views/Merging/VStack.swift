@@ -30,7 +30,7 @@ public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
     }
 
     func insertControl(at index: Int, node: Node) {
-        (node.control as! VStackControl).addSubview(node.control(at: index), at: index)
+        (node.control as! VStackControl).addSubview(node.children[0].control(at: index), at: index)
     }
 
     func removeControl(at index: Int, node: Node) {
