@@ -8,12 +8,12 @@ SwiftTUI brings SwiftUI to the terminal. It provides an API similar to SwiftUI t
 
 SwiftTUI is still in an experimental phase and might not yet be ready to power the next big terminal app. However, there are many things that are working:
 
-✔︎ Using VStack, HStack, ForEach to build lists
-✔︎ Dynamic view content with if statements
-✔︎ Structural identity works in the same way as in SwiftUI
-✔︎ Button, TextField and moving focus with the arrow keys
-✔︎ Modifiers .border() and .padding() are applied to all views in a collection
-✔︎ Using `@State` to store values and invalidate views
+* Using `VStack`, `HStack`, `ForEach` to build lists.
+* Dynamic view content with `if` statements.
+* Structural identity works in the same way as in SwiftUI.
+* `Button`, `TextField` and moving focus with the arrow keys.
+* Modifiers `.border()` and `.padding()` are applied to all views in a collection.
+* Using `@State` to store values and invalidate views.
 
 ### Getting started
 
