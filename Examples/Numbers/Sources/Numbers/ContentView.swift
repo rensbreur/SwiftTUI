@@ -11,13 +11,15 @@ struct ContentView: View {
             Button("Less") {
                 counter -= 1
             }
-            if counter > 0 {
-                ForEach(1 ... counter, id: \.self) { i in
-                    Text("Number \(i)")
+            HStack {
+                if counter > 0 {
+                    ForEach(1 ... counter, id: \.self) { i in
+                        Text("Number \(i)")
+                    }
+                    .border()
+                } else {
+                    Text("Create more items")
                 }
-                .border()
-            } else {
-                Text("Create more items")
             }
         }
         .padding()

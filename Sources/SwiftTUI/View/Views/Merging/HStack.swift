@@ -49,6 +49,7 @@ private class HStackControl: Control {
         return size
     }
     override func layout(size: Size) {
+        super.layout(size: size)
         var size: Size = .zero
         for view in children {
             view.layer.frame.position = Position(column: size.width, line: 0)
@@ -56,7 +57,6 @@ private class HStackControl: Control {
             size.height = max(size.height, view.layer.frame.size.height)
             size.width += view.layer.frame.size.width
         }
-        self.layer.frame.size = size
     }
     override func selectableElement(rightOf index: Int) -> Control? {
         var index = index + 1
