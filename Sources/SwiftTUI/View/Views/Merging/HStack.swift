@@ -40,24 +40,44 @@ public struct HStack<Content: View>: View, PrimitiveView, ViewContainer {
 }
 
 private class HStackControl: Control {
+
+    // MARK: - Layout
+
     override func size(proposedSize: Size) -> Size {
         var size: Size = .zero
-        for view in children {
-            size.height = max(size.height, view.size(proposedSize: proposedSize).height)
-            size.width += view.size(proposedSize: proposedSize).width
+        var remainingItems = children.count
+        for control in children.sorted(by: { $0.layoutPriority > $1.layoutPriority }) {
+            let childSize = control.size(proposedSize: Size(width: (proposedSize.width - size.width) / remainingItems, height: proposedSize.height))
+            size.width += childSize.width
+            if !control.isSpacer {
+                size.height = max(size.height, childSize.height)
+            }
+            remainingItems -= 1
         }
         return size
     }
+
     override func layout(size: Size) {
         super.layout(size: size)
-        var size: Size = .zero
-        for view in children {
-            view.layer.frame.position = Position(column: size.width, line: 0)
-            view.layout(size: view.size(proposedSize: size))
-            size.height = max(size.height, view.layer.frame.size.height)
-            size.width += view.layer.frame.size.width
+        var remainingItems = children.count
+        var remainingWidth = size.width
+        for control in children.sorted(by: { $0.layoutPriority > $1.layoutPriority }) {
+            let childSize = control.size(proposedSize: Size(width: remainingWidth / remainingItems, height: size.height))
+            control.layout(size: childSize)
+            remainingItems -= 1
+            remainingWidth -= childSize.width
+        }
+        var column = 0
+        for control in children {
+            control.layer.frame.position.column = column
+            column += control.layer.frame.size.width
         }
     }
+
+    override var layoutPriority: Double { children.filter { !$0.isSpacer }.map(\.layoutPriority).max() ?? 0 }
+
+    // MARK: - Selection
+    
     override func selectableElement(rightOf index: Int) -> Control? {
         var index = index + 1
         while index < children.count {
@@ -68,6 +88,7 @@ private class HStackControl: Control {
         }
         return super.selectableElement(rightOf: index)
     }
+
     override func selectableElement(leftOf index: Int) -> Control? {
         var index = index - 1
         while index >= 0 {
@@ -78,4 +99,5 @@ private class HStackControl: Control {
         }
         return super.selectableElement(leftOf: index)
     }
+
 }

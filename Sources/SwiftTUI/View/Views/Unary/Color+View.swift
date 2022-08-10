@@ -22,20 +22,12 @@ private class ColorControl: Control {
     var color: Color
 
     init(color: Color) {
-        log("Initting")
         self.color = color
     }
 
-    override func size(proposedSize: Size) -> Size {
-        return super.size(proposedSize: proposedSize)
-    }
-
-    override func layout(size: Size) {
-        log("Layout size \(size)")
-        self.layer.frame.size = size
-    }
-
     override func cell(at position: Position) -> Cell? {
-        Cell(char: "r", backgroundColor: color)
+        Cell(char: " ", backgroundColor: color)
     }
+
+    override var layoutPriority: Double { -1000 }
 }

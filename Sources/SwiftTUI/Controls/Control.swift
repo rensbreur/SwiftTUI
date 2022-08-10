@@ -49,6 +49,12 @@ class Control: LayerDrawing {
         layer.frame.size = size
     }
 
+    var layoutPriority: Double { 0 }
+
+    /// Spacers only grow stacks in their direction, in contrast to other
+    /// flexible views such as colors.
+    var isSpacer: Bool { false }
+
     // MARK: - Drawing
 
     func cell(at position: Position) -> Cell? { nil }

@@ -50,4 +50,6 @@ private class BackgroundControl: Control {
         Cell(char: " ", backgroundColor: color)
     }
 
+    override var layoutPriority: Double { children[0].layoutPriority }
+
 }

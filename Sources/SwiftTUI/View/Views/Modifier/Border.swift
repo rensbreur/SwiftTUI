@@ -55,6 +55,8 @@ private class BorderControl: Control {
         children[0].layer.frame.position = Position(column: 1, line: 1)
         self.layer.frame.size = size
     }
+    
+    override var layoutPriority: Double { children[0].layoutPriority }
 
     override func cell(at position: Position) -> Cell? {
         var char: Character?

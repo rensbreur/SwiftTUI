@@ -53,4 +53,6 @@ private class PaddingControl: Control {
         self.layer.frame.size = size
     }
 
+    override var layoutPriority: Double { children[0].layoutPriority }
+
 }
