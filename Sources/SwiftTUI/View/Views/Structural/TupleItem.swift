@@ -1,10 +1,14 @@
 import Foundation
 
-public struct TupleItem2<A: View, B: View>: View, PrimitiveView {
-    public let content: (A, B)
+public struct TupleView2<C0: View, C1: View>: View, PrimitiveView {
+    public let content: (C0, C1)
 
     static var size: Int? {
-        if let a = ViewWrapper<A>.size, let b = ViewWrapper<B>.size { return a + b }
+        if let c0 = ViewWrapper<C0>.size,
+           let c1 = ViewWrapper<C1>.size
+        {
+            return c0 + c1
+        }
         return nil
     }
 
@@ -21,14 +25,16 @@ public struct TupleItem2<A: View, B: View>: View, PrimitiveView {
 
 }
 
-public struct TupleItem3<A: View, B: View, C: View>: View, PrimitiveView {
-    public let content: (A, B, C)
+public struct TupleView3<C0: View, C1: View, C2: View>: View, PrimitiveView {
+    public let content: (C0, C1, C2)
 
     static var size: Int? {
-        if let a = ViewWrapper<A>.size,
-           let b = ViewWrapper<B>.size,
-           let c = ViewWrapper<C>.size
-        { return a + b + c }
+        if let c0 = ViewWrapper<C0>.size,
+           let c1 = ViewWrapper<C1>.size,
+           let c2 = ViewWrapper<C2>.size
+        {
+            return c0 + c1 + c2
+        }
         return nil
     }
 

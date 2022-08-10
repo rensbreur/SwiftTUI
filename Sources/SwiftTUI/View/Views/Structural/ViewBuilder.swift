@@ -16,11 +16,11 @@ public struct ViewBuilder {
         _ConditionalView(content: .b(second))
     }
 
-    public static func buildBlock<C0: View, C1: View>(_ c0: C0, _ c1: C1) -> TupleItem2<C0, C1> {
-        TupleItem2(content: (c0, c1))
+    public static func buildBlock<C0: View, C1: View>(_ c0: C0, _ c1: C1) -> TupleView2<C0, C1> {
+        TupleView2(content: (c0, c1))
     }
 
-    public static func buildBlock<C0: View, C1: View, C2: View>(_ c0: C0, _ c1: C1, _ c2: C2) -> TupleItem3<C0, C1, C2> {
-        TupleItem3(content: (c0, c1, c2))
+    public static func buildBlock<C0: View, C1: View, C2: View>(_ c0: C0, _ c1: C1, _ c2: C2) -> TupleView3<C0, C1, C2> {
+        TupleView3(content: (c0, c1, c2))
     }
 }
