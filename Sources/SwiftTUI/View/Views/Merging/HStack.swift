@@ -3,7 +3,7 @@ import Foundation
 public struct HStack<Content: View>: View, PrimitiveView, ViewContainer {
     public let content: Content
 
-    public init(@ItemBuilder _ content: () -> Content) {
+    public init(@ViewBuilder _ content: () -> Content) {
         self.content = content()
     }
 

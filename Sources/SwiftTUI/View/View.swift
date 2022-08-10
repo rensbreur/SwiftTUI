@@ -2,7 +2,7 @@ import Foundation
 
 public protocol View {
     associatedtype Body: View
-    @ItemBuilder var body: Body { get }
+    @ViewBuilder var body: Body { get }
 }
 
 extension Never: View {

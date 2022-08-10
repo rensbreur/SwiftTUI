@@ -1,7 +1,7 @@
 import Foundation
 
 @resultBuilder
-public struct ItemBuilder {
+public struct ViewBuilder {
     public static func buildBlock() -> EmptyItem { EmptyItem() }
 
     public static func buildBlock<Content: View>(_ content: Content) -> Content { content }

@@ -5,13 +5,13 @@ public struct ForEach<Data, ID, Content>: View, PrimitiveView where Data : Rando
     public var content: (Data.Element) -> Content
     private var id: KeyPath<Data.Element, ID>
 
-    public init(_ data: Data, @ItemBuilder content: @escaping (Data.Element) -> Content) where Data.Element: Identifiable, ID == Data.Element.ID {
+    public init(_ data: Data, @ViewBuilder content: @escaping (Data.Element) -> Content) where Data.Element: Identifiable, ID == Data.Element.ID {
         self.data = data
         self.content = content
         id = \.id
     }
 
-    public init(_ data: Data, id: KeyPath<Data.Element, ID>, @ItemBuilder content: @escaping (Data.Element) -> Content) {
+    public init(_ data: Data, id: KeyPath<Data.Element, ID>, @ViewBuilder content: @escaping (Data.Element) -> Content) {
         self.data = data
         self.id = id
         self.content = content
