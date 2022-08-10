@@ -1,6 +1,6 @@
 import Foundation
 
-public struct EmptyItem: View, PrimitiveView {
+public struct EmptyView: View, PrimitiveView {
     static var size: Int? { 0 }
     
     func buildNode(_ node: Node) {}
