@@ -1,13 +1,14 @@
 import Foundation
 
 public extension View {
-    func border() -> some View {
-        return Border(content: self)
+    func border(_ color: Color = .default) -> some View {
+        return Border(content: self, color: color)
     }
 }
 
 private struct Border<Content: View>: View, PrimitiveView, ControlMapper {
     let content: Content
+    let color: Color
 
     static var size: Int? { ViewWrapper<Content>.size }
 
@@ -22,7 +23,7 @@ private struct Border<Content: View>: View, PrimitiveView, ControlMapper {
 
     func passControl(_ control: Control) -> Control {
         if let borderControl = control.parent { return borderControl }
-        let borderControl = BorderControl()
+        let borderControl = BorderControl(color: color)
         borderControl.addSubview(control, at: 0)
         return borderControl
     }
@@ -30,6 +31,12 @@ private struct Border<Content: View>: View, PrimitiveView, ControlMapper {
 }
 
 private class BorderControl: Control {
+    var color: Color
+
+    init(color: Color) {
+        self.color = color
+    }
+
     override func size(proposedSize: Size) -> Size {
         var proposedSize = proposedSize
         proposedSize.width -= 2
@@ -50,26 +57,27 @@ private class BorderControl: Control {
     }
 
     override func cell(at position: Position) -> Cell? {
+        var char: Character?
         if position.line == 0 {
             if position.column == 0 {
-                return .init(char: "┌")
+                char = "┌"
             } else if position.column == layer.frame.size.width - 1 {
-                return .init(char: "┐")
+                char = "┐"
             } else {
-                return .init(char: "─")
+                char = "─"
             }
         } else if position.line == layer.frame.size.height - 1 {
             if position.column == 0 {
-                return .init(char: "└")
+                char = "└"
             } else if position.column == layer.frame.size.width - 1 {
-                return .init(char: "┘")
+                char = "┘"
             } else {
-                return .init(char: "─")
+                char = "─"
             }
         } else if position.column == 0 || position.column == layer.frame.size.width - 1 {
-            return .init(char: "│")
+            char = "│"
         }
-        return nil
+        return char.map { Cell(char: $0, foregroundColor: color) }
     }
 
 }
