@@ -8,12 +8,12 @@ public struct ViewBuilder {
 
     public static func buildIf<V: View>(_ content: V)  -> V  { content }
 
-    public static func buildEither<T: View, F: View>(first: T) -> _ConditionalItem<T, F> {
-        _ConditionalItem(content: .a(first))
+    public static func buildEither<TrueContent: View, FalseContent: View>(first: TrueContent) -> _ConditionalView<TrueContent, FalseContent> {
+        _ConditionalView(content: .a(first))
     }
 
-    public static func buildEither<T: View, F: View>(second: F) -> _ConditionalItem<T, F> {
-        _ConditionalItem(content: .b(second))
+    public static func buildEither<TrueContent: View, FalseContent: View>(second: FalseContent) -> _ConditionalView<TrueContent, FalseContent> {
+        _ConditionalView(content: .b(second))
     }
 
     public static func buildBlock<C0: View, C1: View>(_ c0: C0, _ c1: C1) -> TupleItem2<C0, C1> {

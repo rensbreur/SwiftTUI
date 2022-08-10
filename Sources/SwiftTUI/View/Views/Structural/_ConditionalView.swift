@@ -1,15 +1,15 @@
 import Foundation
 
-public struct _ConditionalItem<A: View, B: View>: View, PrimitiveView {
+public struct _ConditionalView<TrueContent: View, FalseContent: View>: View, PrimitiveView {
     enum ConditionalContent {
-        case a(A)
-        case b(B)
+        case a(TrueContent)
+        case b(FalseContent)
     }
 
     let content: ConditionalContent
 
     static var size: Int? {
-        if ViewWrapper<A>.size == ViewWrapper<B>.size { return ViewWrapper<A>.size }
+        if ViewWrapper<TrueContent>.size == ViewWrapper<FalseContent>.size { return ViewWrapper<TrueContent>.size }
         return nil
     }
 
