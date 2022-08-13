@@ -34,15 +34,22 @@ private class TextFieldControl: Control {
 
     override func handleEvent(_ char: UInt8) {
         let character = Character(.init(char))
-        if character == "\n" { action(text); return }
-        if char == 127 { self.text.removeLast(); return }
+        if character == "\n" {
+            action(text)
+            return
+        }
+        if char == 127 {
+            self.text.removeLast()
+            layer.invalidate()
+            return
+        }
         self.text += String(character)
         layer.invalidate()
     }
 
     override func cell(at position: Position) -> Cell? {
         guard position.line == 0 else { return nil }
-        if position.column == text.count, rootWindow?.firstResponder === self { return Cell(char: "_") }
+        if position.column == text.count, isFirstResponder { return Cell(char: "_") }
         guard position.column < text.count else { return .init(char: " ") }
         return Cell(char: text[text.index(text.startIndex, offsetBy: position.column)])
     }

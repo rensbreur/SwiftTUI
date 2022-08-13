@@ -24,6 +24,11 @@ class Control: LayerDrawing {
     }
 
     func removeSubview(at index: Int) {
+        if children[index].isFirstResponder {
+            rootWindow?.firstResponder?.resignFirstResponder()
+            rootWindow?.firstResponder = selectableElement(above: index) ?? selectableElement(below: index)
+            rootWindow?.firstResponder?.becomeFirstResponder()
+        }
         children[index].window = nil
         children[index].parent = nil
         self.children.remove(at: index)
@@ -70,6 +75,8 @@ class Control: LayerDrawing {
     func becomeFirstResponder() {}
 
     func resignFirstResponder() {}
+
+    var isFirstResponder: Bool { rootWindow?.firstResponder === self }
 
     // MARK: - Selection
 
