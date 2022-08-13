@@ -38,7 +38,15 @@ struct MyTerminalView: View {
 Application(rootView: MyTerminalView()).start()
 ```
 
-Check out the Examples directory for more examples.
+### Examples
+
+Check out the Examples directory for examples of how to use SwiftTUI.
+
+#### ToDoList
+
+![](Examples/ToDoList/screenshot.png)
+
+This is a very simple to-do list application. Use the arrow keys to move around. To complete a to-do item, select it, and then press the enter key or space bar. To add a new to-do item, move to the text field, enter a description, and press the enter key to add it to the list. Completed items are automatically removed from the list after half a second.
 
 ### More
 
