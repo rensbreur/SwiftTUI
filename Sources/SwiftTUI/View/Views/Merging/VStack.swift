@@ -2,13 +2,19 @@ import Foundation
 
 public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
     public let content: Content
+    let alignment: HorizontalAlignment
+    let spacing: Int?
 
-    public init(@ViewBuilder _ content: () -> Content) {
+    public init(alignment: HorizontalAlignment = .leading, spacing: Int? = nil, @ViewBuilder _ content: () -> Content) {
         self.content = content()
+        self.alignment = alignment
+        self.spacing = spacing
     }
 
-    init(content: Content) {
+    init(content: Content, alignment: HorizontalAlignment = .leading, spacing: Int? = nil) {
         self.content = content
+        self.alignment = alignment
+        self.spacing = spacing
     }
 
     static var size: Int? { 1 }
@@ -21,12 +27,15 @@ public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
 
     func buildNode(_ node: Node) {
         node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
-        node.control = VStackControl()
+        node.control = VStackControl(alignment: alignment, spacing: spacing ?? 0)
     }
 
     func updateNode(_ node: Node) {
         node.viewWrapper = ViewWrapper(view: self)
         node.children[0].update(using: ViewWrapper(view: content))
+        let control = node.control as! VStackControl
+        control.alignment = alignment
+        control.spacing = spacing ?? 0
     }
 
     func insertControl(at index: Int, node: Node) {
@@ -40,6 +49,13 @@ public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
 }
 
 private class VStackControl: Control {
+    var alignment: HorizontalAlignment
+    var spacing: Int
+
+    init(alignment: HorizontalAlignment, spacing: Int) {
+        self.alignment = alignment
+        self.spacing = spacing
+    }
 
     // MARK: - Layout
 
@@ -49,6 +65,9 @@ private class VStackControl: Control {
         for control in children.sorted(by: { $0.layoutPriority > $1.layoutPriority }) {
             let childSize = control.size(proposedSize: Size(width: proposedSize.width, height: (proposedSize.height - size.height) / remainingItems))
             size.height += childSize.height
+            if remainingItems > 1 {
+                size.height += spacing
+            }
             if !control.isSpacer {
                 size.width = max(size.width, childSize.width)
             }
@@ -64,6 +83,9 @@ private class VStackControl: Control {
         for control in children.sorted(by: { $0.layoutPriority > $1.layoutPriority }) {
             let childSize = control.size(proposedSize: Size(width: size.width, height: remainingHeight / remainingItems))
             control.layout(size: childSize)
+            if remainingItems > 1 {
+                remainingHeight -= spacing
+            }
             remainingItems -= 1
             remainingHeight -= childSize.height
         }
@@ -71,6 +93,12 @@ private class VStackControl: Control {
         for control in children {
             control.layer.frame.position.line = line
             line += control.layer.frame.size.height
+            line += spacing
+            switch alignment {
+            case .leading: control.layer.frame.position.column = 0
+            case .center: control.layer.frame.position.column = (size.width - control.layer.frame.size.width) / 2
+            case .trailing: control.layer.frame.position.column = size.width - control.layer.frame.size.width
+            }
         }
     }
 
