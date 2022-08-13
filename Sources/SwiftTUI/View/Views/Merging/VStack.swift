@@ -63,7 +63,6 @@ private class VStackControl: Control {
         var remainingHeight = size.height
         for control in children.sorted(by: { $0.layoutPriority > $1.layoutPriority }) {
             let childSize = control.size(proposedSize: Size(width: size.width, height: remainingHeight / remainingItems))
-            log("VStack laying out \(control.layoutPriority) \(childSize.height)")
             control.layout(size: childSize)
             remainingItems -= 1
             remainingHeight -= childSize.height

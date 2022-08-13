@@ -27,7 +27,6 @@ class Renderer {
     /// Draw only the invalidated part of the layer.
     func update() {
         if let invalidated = layer.invalidated {
-            log("Drawing invalidated area \(invalidated)")
             draw(rect: invalidated)
             layer.invalidated = nil
         }
@@ -58,7 +57,6 @@ class Renderer {
 
     private func drawPixel(_ cell: Cell, at position: Position) {
         guard position.column >= 0, position.line >= 0, position.column < layer.frame.size.width, position.line < layer.frame.size.height else {
-            log("Attempted to draw at \(position) outside of layer area \(layer.frame.size)")
             return
         }
         if cache[position.line][position.column] != cell {
