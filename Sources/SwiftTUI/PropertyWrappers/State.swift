@@ -1,12 +1,7 @@
 import Foundation
 
-protocol StateProperty {
-    var storage: Box<StateStorage?> { get }
-    var initialErasedValue: Any { get }
-}
-
 @propertyWrapper
-public struct State<T>: StateProperty {
+public struct State<T>: AnyState {
     public let initialValue: T
 
     public init(initialValue: T) {
@@ -17,26 +12,41 @@ public struct State<T>: StateProperty {
         self.initialValue = wrappedValue
     }
 
-    var storage = Box<StateStorage?>(value: nil)
-
-    var initialErasedValue: Any { initialValue }
+    /// @State variables can have a nonmutating setter, because they are just
+    /// a reference to state stored in a Node.
+    var valueReference = StateReference()
 
     public var wrappedValue: T {
-        get { storage.value!.value as! T }
-        nonmutating set { storage.value!.value = newValue }
+        get {
+            guard let node = valueReference.node,
+                  let label = valueReference.label
+            else {
+                assertionFailure("Attempting to access @State variable before view is instantiated")
+                return initialValue
+            }
+            if let value = node.state[label] {
+                return value as! T
+            }
+            return initialValue
+        }
+        nonmutating set {
+            guard let node = valueReference.node,
+                  let label = valueReference.label
+            else {
+                assertionFailure("Attempting to modify @State variable before view is instantiated")
+                return
+            }
+            node.state[label] = newValue
+            Node.invalidatedNodes.append(node)
+        }
     }
 }
 
-class Box<T> {
-    var value: T
-    init(value: T) { self.value = value }
+protocol AnyState {
+    var valueReference: StateReference { get }
 }
 
-class StateStorage {
-    var value: Any { didSet { Node.invalidatedNodes.append(node!) } }
+class StateReference {
     weak var node: Node?
-    init(value: Any, node: Node) {
-        self.value = value
-        self.node = node
-    }
+    var label: String?
 }

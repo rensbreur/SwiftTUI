@@ -19,7 +19,9 @@ public struct Button: View, PrimitiveView {
         let last = (node.viewWrapper as! ViewWrapper<Self>).view
         node.viewWrapper = ViewWrapper(view: self)
         if self.n != last.n {
-            (node.control as! ButtonControl).text = n
+            let control = node.control as! ButtonControl
+            control.text = n
+            control.layer.invalidate()
         }
     }
 }

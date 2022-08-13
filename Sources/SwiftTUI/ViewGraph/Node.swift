@@ -12,6 +12,8 @@ import Foundation
 final class Node {
     var viewWrapper: AnyViewWrapper
 
+    var state: [String: Any] = [:]
+
     var control: Control?
 
     private(set) var parent: Node?

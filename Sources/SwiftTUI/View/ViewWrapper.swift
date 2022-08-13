@@ -8,11 +8,7 @@ struct ViewWrapper<I: View>: AnyViewWrapper {
         if let view = view as? PrimitiveView {
             view.buildNode(node)
         } else {
-            for (_, value) in Mirror(reflecting: view).children {
-                if let stateValue = value as? StateProperty {
-                    stateValue.storage.value = StateStorage(value: stateValue.initialErasedValue, node: node)
-                }
-            }
+            setupStateProperties(node: node)
             node.addNode(at: 0, Node(viewWrapper: ViewWrapper<I.Body>(view: view.body)))
         }
     }
@@ -21,8 +17,21 @@ struct ViewWrapper<I: View>: AnyViewWrapper {
         if let view = view as? PrimitiveView {
             view.updateNode(node)
         } else {
+            setupStateProperties(node: node)
             node.viewWrapper = self
             node.children[0].update(using: ViewWrapper<I.Body>(view: view.body))
+        }
+    }
+
+    private func setupStateProperties(node: Node) {
+        for (label, value) in Mirror(reflecting: view).children {
+            if let stateValue = value as? AnyState {
+                // Note: this is not how SwiftUI handles state.
+                // This will break if you initialize a View, and then use it
+                // multiple times, because we would be editing the same View.
+                stateValue.valueReference.node = node
+                stateValue.valueReference.label = label
+            }
         }
     }
 
