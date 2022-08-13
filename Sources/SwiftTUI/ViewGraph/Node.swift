@@ -19,11 +19,15 @@ final class Node {
     private(set) var parent: Node?
     private(set) var children: [Node] = []
 
+    private weak var _application: Application?
+    var application: Application? {
+        get { _application ?? parent?.application }
+        set { _application = newValue }
+    }
+
     private(set) var index: Int = 0
 
     private(set) var built = false
-
-    static var invalidatedNodes: [Node] = []
 
     init(viewWrapper: AnyViewWrapper) {
         self.viewWrapper = viewWrapper

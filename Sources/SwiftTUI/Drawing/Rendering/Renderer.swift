@@ -18,6 +18,8 @@ class Renderer {
 
     private var currentlyInverted: Bool = false
 
+    weak var application: Application?
+
     init(layer: Layer) {
         self.layer = layer
         setCache()

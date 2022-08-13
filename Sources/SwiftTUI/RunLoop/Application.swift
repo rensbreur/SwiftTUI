@@ -1,8 +1,6 @@
 import Foundation
 
-public class Application<I: View> {
-    public let rootView: I
-
+public class Application {
     private let node: Node
     private let window: Window
     private let control: Control
@@ -10,9 +8,10 @@ public class Application<I: View> {
 
     private var arrowKeyParser = ArrowKeyParser()
 
-    public init(rootView: I) {
-        self.rootView = rootView
+    private var invalidatedNodes: [Node] = []
+    private var updateScheduled = false
 
+    public init<I: View>(rootView: I) {
         node = Node(viewWrapper: ViewWrapper(view: VStack(content: rootView)))
         node.build()
 
@@ -25,6 +24,10 @@ public class Application<I: View> {
         window.firstResponder?.becomeFirstResponder()
 
         renderer = Renderer(layer: window.layer)
+        window.layer.renderer = renderer
+
+        node.application = self
+        renderer.application = self
     }
 
     public func start() {
@@ -94,15 +97,27 @@ public class Application<I: View> {
         } else {
             window.firstResponder?.handleEvent(char)
         }
-
-        runLoopCycleEnd()
     }
 
-    private func runLoopCycleEnd() {
-        for node in Node.invalidatedNodes {
+    func invalidateNode(_ node: Node) {
+        invalidatedNodes.append(node)
+        scheduleUpdate()
+    }
+
+    func scheduleUpdate() {
+        if !updateScheduled {
+            DispatchQueue.main.async { self.update() }
+            updateScheduled = true
+        }
+    }
+
+    private func update() {
+        updateScheduled = false
+
+        for node in invalidatedNodes {
             node.update(using: node.viewWrapper)
         }
-        Node.invalidatedNodes = []
+        invalidatedNodes = []
 
         control.layout(size: window.layer.frame.size)
         renderer.update()
@@ -111,7 +126,7 @@ public class Application<I: View> {
     private func handleWindowSizeChange() {
         updateWindowSize()
         control.layer.invalidate()
-        runLoopCycleEnd()
+        update()
     }
 
     private func updateWindowSize() {

@@ -37,7 +37,7 @@ public struct State<T>: AnyState {
                 return
             }
             node.state[label] = newValue
-            Node.invalidatedNodes.append(node)
+            node.application?.invalidateNode(node)
         }
     }
 
