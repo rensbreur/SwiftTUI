@@ -6,8 +6,8 @@ import Foundation
 /// ```
 /// tail -f /tmp/swift_tui_log
 /// ```
-func log(_ item: Any) {
-    print(item, to: &logStream)
+func log(_ item: Any, terminator: String = "\n") {
+    print(item, terminator: terminator, to: &logStream)
 }
 
 var logStream = LogStream()

@@ -61,3 +61,9 @@ extension ViewWrapper: ControlMapper where I: ControlMapper {
         view.passControl(control)
     }
 }
+
+extension ViewWrapper: CustomStringConvertible {
+    var description: String {
+        String(describing: I.self)
+    }
+}
