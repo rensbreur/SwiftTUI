@@ -40,6 +40,15 @@ public struct State<T>: AnyState {
             Node.invalidatedNodes.append(node)
         }
     }
+
+    public var projectedValue: Binding<T> {
+        // Note: this works, but it is not as efficient as in SwiftUI.
+        // In SwiftUI, Bindings can actively observe state. If you have a
+        // @State variable in a view that is not directly used in the body,
+        // but only in child views through @Bindings, updating the @Bindings
+        // will only invalidate the child views.
+        Binding<T>(get: { wrappedValue }, set: { wrappedValue = $0 })
+    }
 }
 
 protocol AnyState {

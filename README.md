@@ -20,7 +20,7 @@ SwiftTUI is still in an experimental phase and might not yet be ready to power t
 ✓ `Button`, `TextField` and moving focus with the arrow keys.<br>
 ✓ Static views `Text` and `Color`<br>
 ✓ Modifiers `.border()`, `.padding()` and `background()`, which are applied to all views in a collection like in SwiftUI.<br>
-✓ Using `@State` to store values and invalidate views.
+✓ Using `@State` and `@Binding` to store values and invalidate views.
 
 ### Getting started
 
