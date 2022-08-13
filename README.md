@@ -39,3 +39,7 @@ Application(rootView: MyTerminalView()).start()
 ```
 
 Check out the Examples directory for more examples.
+
+### More
+
+See a screen recording of SwiftTUI [in action](https://www.reddit.com/r/SwiftUI/comments/wlabyn/im_making_a_version_of_swiftui_for_terminal/) on Reddit.
