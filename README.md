@@ -40,13 +40,19 @@ Application(rootView: MyTerminalView()).start()
 
 ### Examples
 
-Check out the Examples directory for examples of how to use SwiftTUI.
+The following examples of how to use SwiftTUI can be found in the Examples directory.
 
-#### ToDoList
+#### Examples/ToDoList
 
 ![](Examples/ToDoList/screenshot.png)
 
 This is a very simple to-do list application. Use the arrow keys to move around. To complete a to-do item, select it, and then press the enter key or space bar. To add a new to-do item, move to the text field, enter a description, and press the enter key to add it to the list. Completed items are automatically removed from the list after half a second.
+
+#### Examples/Flags
+
+![](Examples/Flags/screenshot.png)
+
+This is a flag editor, which you will agree to if you come from a country which has a simple flag consisting of colors stacked horizontally or vertically. Select one of the colors of the flag to change it. Use the options on the right to change the number of colors or the flag orientation.
 
 ### More
 
