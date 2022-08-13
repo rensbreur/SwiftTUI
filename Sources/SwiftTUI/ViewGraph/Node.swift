@@ -23,12 +23,6 @@ final class Node {
 
     static var invalidatedNodes: [Node] = []
 
-    var size: Int {
-        if let size = type(of: viewWrapper).size { return size }
-        build()
-        return children.map(\.size).reduce(0, +)
-    }
-
     init(viewWrapper: AnyViewWrapper) {
         self.viewWrapper = viewWrapper
     }
@@ -36,6 +30,23 @@ final class Node {
     func update(using viewWrapper: AnyViewWrapper) {
         build()
         viewWrapper.updateNode(self)
+    }
+
+    /// The total number of controls in the node.
+    /// The node does not need to be fully built for the size to be computed.
+    var size: Int {
+        if let size = type(of: viewWrapper).size { return size }
+        build()
+        return children.map(\.size).reduce(0, +)
+    }
+
+    /// The number of controls in the parent node _before_ the current node.
+    private var offset: Int {
+        var offset = 0
+        for i in 0 ..< index {
+            offset += parent?.children[i].size ?? 0
+        }
+        return offset
     }
 
     func build() {
@@ -59,7 +70,7 @@ final class Node {
         }
         if built {
             for i in 0 ..< node.size {
-                node.insertControl(at: i)
+                insertControl(at: node.offset + i)
             }
         }
     }
@@ -67,7 +78,7 @@ final class Node {
     func removeNode(at index: Int) {
         if built {
             for i in (0 ..< children[index].size).reversed() {
-                children[index].removeControl(at: i)
+                removeControl(at: children[index].offset + i)
             }
         }
         children[index].parent = nil
@@ -104,11 +115,7 @@ final class Node {
             container.insertControl(at: offset, node: self)
             return
         }
-        var offset = offset
-        for i in 0 ..< index {
-            offset += parent?.children[i].size ?? 0
-        }
-        parent?.insertControl(at: offset)
+        parent?.insertControl(at: offset + self.offset)
     }
 
     private func removeControl(at offset: Int) {
@@ -116,10 +123,6 @@ final class Node {
             container.removeControl(at: offset, node: self)
             return
         }
-        var offset = offset
-        for i in 0 ..< index {
-            offset += parent?.children[i].size ?? 0
-        }
-        parent?.removeControl(at: offset)
+        parent?.removeControl(at: offset + self.offset)
     }
 }
