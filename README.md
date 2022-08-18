@@ -57,3 +57,5 @@ This is a flag editor, which you will agree to if you come from a country which 
 ### More
 
 See a screen recording of SwiftTUI [in action](https://www.reddit.com/r/SwiftUI/comments/wlabyn/im_making_a_version_of_swiftui_for_terminal/) on Reddit.
+
+Learn how [the diffing works](https://rensbr.eu/blog/swiftui-diffing/) on my blog.
