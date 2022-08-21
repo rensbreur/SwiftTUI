@@ -5,21 +5,21 @@ struct ViewWrapper<I: View>: AnyViewWrapper {
     let view: I
 
     func buildNode(_ node: Node) {
+        setupStateProperties(node: node)
+        setupEnvironmentProperties(node: node)
         if let view = view as? PrimitiveView {
             view.buildNode(node)
         } else {
-            setupStateProperties(node: node)
-            setupEnvironmentProperties(node: node)
             node.addNode(at: 0, Node(viewWrapper: ViewWrapper<I.Body>(view: view.body)))
         }
     }
 
     func updateNode(_ node: Node) {
+        setupStateProperties(node: node)
+        setupEnvironmentProperties(node: node)
         if let view = view as? PrimitiveView {
             view.updateNode(node)
         } else {
-            setupStateProperties(node: node)
-            setupEnvironmentProperties(node: node)
             node.viewWrapper = self
             node.children[0].update(using: ViewWrapper<I.Body>(view: view.body))
         }

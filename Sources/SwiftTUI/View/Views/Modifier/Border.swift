@@ -1,14 +1,15 @@
 import Foundation
 
 public extension View {
-    func border(_ color: Color = .default) -> some View {
+    func border(_ color: Color? = nil) -> some View {
         return Border(content: self, color: color)
     }
 }
 
 private struct Border<Content: View>: View, PrimitiveView, ControlMapper {
     let content: Content
-    let color: Color
+    let color: Color?
+    @Environment(\.foregroundColor) var foregroundColor: Color
 
     static var size: Int? { ViewWrapper<Content>.size }
 
@@ -23,7 +24,7 @@ private struct Border<Content: View>: View, PrimitiveView, ControlMapper {
 
     func passControl(_ control: Control) -> Control {
         if let borderControl = control.parent { return borderControl }
-        let borderControl = BorderControl(color: color)
+        let borderControl = BorderControl(color: color ?? foregroundColor)
         borderControl.addSubview(control, at: 0)
         return borderControl
     }
