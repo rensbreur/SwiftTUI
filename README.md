@@ -12,15 +12,14 @@ SwiftTUI brings SwiftUI to the terminal. It provides an API similar to SwiftUI t
 
 ### What is working
 
-SwiftTUI is still in an experimental phase and might not yet be ready to power the next big terminal app. However, there are many things that are working:
+Many features from SwiftUI are already working:
 
-✓ Using `VStack`, `HStack`, `ForEach` and `Spacer` to build lists.<br>
-✓ Dynamic view content with `if` statements.<br>
-✓ Structural identity works in the same way as in SwiftUI.<br>
-✓ `Button`, `TextField` and moving focus with the arrow keys.<br>
-✓ Static views `Text` and `Color`<br>
-✓ Modifiers `.border()`, `.padding()` and `background()`, which are applied to all views in a collection like in SwiftUI.<br>
-✓ Using `@State` and `@Binding` to store values and invalidate views.
+✓ Property wrappers `@State`, `@Binding`, `@Environment`<br>
+✓ `VStack`, `HStack`, `ForEach`, `Group` and `@ViewBuilder`<br>
+✓ Structural identity like in SwiftUI<br>
+✓ `Button`, `TextField` and moving focus with the arrow keys<br>
+✓ `Text`, `Color`, `Spacer`<br>
+✓ Modifiers `.border()`, `.padding()` and `background()`, applied to all views in a collection like in SwiftUI
 
 ### Getting started
 
@@ -31,7 +30,7 @@ import SwiftTUI
 
 struct MyTerminalView: View {
   var body: some View {
-    Text("Hello, world!)
+    Text("Hello, world!")
   }
 }
 
