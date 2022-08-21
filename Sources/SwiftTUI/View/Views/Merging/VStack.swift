@@ -28,6 +28,7 @@ public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
     func buildNode(_ node: Node) {
         node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
         node.control = VStackControl(alignment: alignment, spacing: spacing ?? 0)
+        node.environment = { $0.stackOrientation = .vertical }
     }
 
     func updateNode(_ node: Node) {
@@ -62,15 +63,13 @@ private class VStackControl: Control {
     override func size(proposedSize: Size) -> Size {
         var size: Size = .zero
         var remainingItems = children.count
-        for control in children.sorted(by: { $0.layoutPriority > $1.layoutPriority }) {
+        for control in children.sorted(by: { $0.verticalFlexibility(width: proposedSize.width) < $1.verticalFlexibility(width: proposedSize.width) }) {
             let childSize = control.size(proposedSize: Size(width: proposedSize.width, height: (proposedSize.height - size.height) / remainingItems))
             size.height += childSize.height
             if remainingItems > 1 {
                 size.height += spacing
             }
-            if !control.isSpacer {
-                size.width = max(size.width, childSize.width)
-            }
+            size.width = max(size.width, childSize.width)
             remainingItems -= 1
         }
         return size
@@ -80,7 +79,7 @@ private class VStackControl: Control {
         super.layout(size: size)
         var remainingItems = children.count
         var remainingHeight = size.height
-        for control in children.sorted(by: { $0.layoutPriority > $1.layoutPriority }) {
+        for control in children.sorted(by: { $0.verticalFlexibility(width: size.width) < $1.verticalFlexibility(width: size.width) }) {
             let childSize = control.size(proposedSize: Size(width: size.width, height: remainingHeight / remainingItems))
             control.layout(size: childSize)
             if remainingItems > 1 {
@@ -101,8 +100,6 @@ private class VStackControl: Control {
             }
         }
     }
-
-    override var layoutPriority: Double { children.filter { !$0.isSpacer }.map(\.layoutPriority).max() ?? 0 }
 
     // MARK: - Selection
 

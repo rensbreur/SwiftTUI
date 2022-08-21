@@ -54,11 +54,17 @@ class Control: LayerDrawing {
         layer.frame.size = size
     }
 
-    var layoutPriority: Double { 0 }
+    func horizontalFlexibility(height: Int) -> Int {
+        let minSize = size(proposedSize: Size(width: 0, height: height))
+        let maxSize = size(proposedSize: Size(width: .max, height: height))
+        return maxSize.width - minSize.width
+    }
 
-    /// Spacers only grow stacks in their direction, in contrast to other
-    /// flexible views such as colors.
-    var isSpacer: Bool { false }
+    func verticalFlexibility(width: Int) -> Int {
+        let minSize = size(proposedSize: Size(width: width, height: 0))
+        let maxSize = size(proposedSize: Size(width: width, height: .max))
+        return maxSize.height - minSize.height
+    }
 
     // MARK: - Drawing
 

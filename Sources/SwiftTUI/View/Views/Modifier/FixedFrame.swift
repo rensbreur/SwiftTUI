@@ -75,9 +75,4 @@ private class FixedFrameControl: Control {
         }
     }
 
-    override var layoutPriority: Double {
-        if width != nil, height != nil { return 0 }
-        return children[0].layoutPriority
-    }
-
 }

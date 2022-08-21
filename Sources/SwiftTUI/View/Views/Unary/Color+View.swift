@@ -29,5 +29,4 @@ private class ColorControl: Control {
         Cell(char: " ", backgroundColor: color)
     }
 
-    override var layoutPriority: Double { -1000 }
 }
