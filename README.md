@@ -19,11 +19,11 @@ Many features from SwiftUI are already working:
 ✓ Structural identity like in SwiftUI<br>
 ✓ `Button`, `TextField` and moving focus with the arrow keys<br>
 ✓ `Text`, `Color`, `Spacer`<br>
-✓ Modifiers `.border()`, `.padding()` and `background()`, applied to all views in a collection like in SwiftUI
+✓ Modifiers `.border()`, `.padding()`, `.background()`, `.foregroundColor()`, applied to all views in a collection like in SwiftUI
 
 ### Getting started
 
-To use SwiftTUI, you need to add the SwiftTUI package dependency. Import SwiftTUI in your files, and write your views like SwiftUI views with the supported features. Then, start the terminal application using one of your views as the root view. This is the easiest SwiftTUI app you can write:
+To use SwiftTUI, you need to add the SwiftTUI package dependency. Import SwiftTUI in your files, and write your views like SwiftUI views with the supported features. Then, start the terminal application using one of your views as the root view. This is the simplest SwiftTUI app you can write:
 
 ```swift
 import SwiftTUI
@@ -37,17 +37,15 @@ struct MyTerminalView: View {
 Application(rootView: MyTerminalView()).start()
 ```
 
-### Examples
+### Showcase
 
-The following examples of how to use SwiftTUI can be found in the Examples directory.
-
-#### Examples/ToDoList
+#### ToDoList ([Examples/ToDoList](Examples/ToDoList))
 
 ![](Examples/ToDoList/screenshot.png)
 
 This is a very simple to-do list application. Use the arrow keys to move around. To complete a to-do item, select it, and then press the enter key or space bar. To add a new to-do item, move to the text field, enter a description, and press the enter key to add it to the list. Completed items are automatically removed from the list after half a second.
 
-#### Examples/Flags
+#### Flags ([Examples/Flags](Examples/Flags))
 
 ![](Examples/Flags/screenshot.png)
 
