@@ -16,15 +16,10 @@ final class Node {
     var environment: ((inout EnvironmentValues) -> Void)?
 
     var control: Control?
+    weak var application: Application?
 
     private(set) var parent: Node?
     private(set) var children: [Node] = []
-
-    private weak var _application: Application?
-    var application: Application? {
-        get { _application ?? parent?.application }
-        set { _application = newValue }
-    }
 
     private(set) var index: Int = 0
 
@@ -38,6 +33,8 @@ final class Node {
         build()
         viewWrapper.updateNode(self)
     }
+
+    var root: Node { parent?.root ?? self }
 
     /// The total number of controls in the node.
     /// The node does not need to be fully built for the size to be computed.

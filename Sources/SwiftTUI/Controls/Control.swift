@@ -8,10 +8,10 @@ class Control: LayerDrawing {
 
     private var index: Int = 0
 
+    var window: Window?
     private(set) lazy var layer: Layer = makeLayer()
 
-    var window: Window?
-    final var rootWindow: Window? { window ?? parent?.rootWindow }
+    var root: Control { parent?.root ?? self }
 
     func addSubview(_ view: Control, at index: Int) {
         self.children.insert(view, at: index)
@@ -25,9 +25,9 @@ class Control: LayerDrawing {
 
     func removeSubview(at index: Int) {
         if children[index].isFirstResponder {
-            rootWindow?.firstResponder?.resignFirstResponder()
-            rootWindow?.firstResponder = selectableElement(above: index) ?? selectableElement(below: index)
-            rootWindow?.firstResponder?.becomeFirstResponder()
+            root.window?.firstResponder?.resignFirstResponder()
+            root.window?.firstResponder = selectableElement(above: index) ?? selectableElement(below: index)
+            root.window?.firstResponder?.becomeFirstResponder()
         }
         children[index].window = nil
         children[index].parent = nil
@@ -76,7 +76,7 @@ class Control: LayerDrawing {
 
     func resignFirstResponder() {}
 
-    var isFirstResponder: Bool { rootWindow?.firstResponder === self }
+    var isFirstResponder: Bool { root.window?.firstResponder === self }
 
     // MARK: - Selection
 
