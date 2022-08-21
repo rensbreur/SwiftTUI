@@ -9,6 +9,7 @@ struct ViewWrapper<I: View>: AnyViewWrapper {
             view.buildNode(node)
         } else {
             setupStateProperties(node: node)
+            setupEnvironmentProperties(node: node)
             node.addNode(at: 0, Node(viewWrapper: ViewWrapper<I.Body>(view: view.body)))
         }
     }
@@ -18,6 +19,7 @@ struct ViewWrapper<I: View>: AnyViewWrapper {
             view.updateNode(node)
         } else {
             setupStateProperties(node: node)
+            setupEnvironmentProperties(node: node)
             node.viewWrapper = self
             node.children[0].update(using: ViewWrapper<I.Body>(view: view.body))
         }
@@ -31,6 +33,14 @@ struct ViewWrapper<I: View>: AnyViewWrapper {
                 // multiple times, because we would be editing the same View.
                 stateValue.valueReference.node = node
                 stateValue.valueReference.label = label
+            }
+        }
+    }
+
+    private func setupEnvironmentProperties(node: Node) {
+        for (_, value) in Mirror(reflecting: view).children {
+            if let environmentValue = value as? AnyEnvironment {
+                environmentValue.valueReference.node = node
             }
         }
     }

@@ -13,6 +13,7 @@ final class Node {
     var viewWrapper: AnyViewWrapper
 
     var state: [String: Any] = [:]
+    var environment: ((inout EnvironmentValues) -> Void)?
 
     var control: Control?
 
