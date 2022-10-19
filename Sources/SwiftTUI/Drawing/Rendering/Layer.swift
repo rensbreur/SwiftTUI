@@ -38,7 +38,7 @@ class Layer {
     /// If the parent is the root layer, it sets the `invalidated` rect instead.
     func invalidate(rect: Rect) {
         if let parent = self.parent {
-            parent.invalidate(rect: Rect(position: Position(column: rect.position.column + frame.position.column, line: rect.position.line + frame.position.line), size: rect.size))
+            parent.invalidate(rect: Rect(position: rect.position + frame.position, size: rect.size))
             return
         }
         renderer?.application?.scheduleUpdate()
