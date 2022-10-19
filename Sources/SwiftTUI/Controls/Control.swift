@@ -78,7 +78,9 @@ class Control: LayerDrawing {
         }
     }
 
-    func becomeFirstResponder() {}
+    func becomeFirstResponder() {
+        scroll(to: .zero)
+    }
 
     func resignFirstResponder() {}
 
@@ -100,5 +102,11 @@ class Control: LayerDrawing {
     func selectableElement(above index: Int) -> Control? { parent?.selectableElement(above: self.index) }
     func selectableElement(rightOf index: Int) -> Control? { parent?.selectableElement(rightOf: self.index) }
     func selectableElement(leftOf index: Int) -> Control? { parent?.selectableElement(leftOf: self.index) }
+
+    // MARK: - Scrolling
+
+    func scroll(to position: Position) {
+        parent?.scroll(to: position + layer.frame.position)
+    }
 
 }

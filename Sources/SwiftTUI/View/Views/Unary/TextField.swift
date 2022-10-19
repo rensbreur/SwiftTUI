@@ -57,10 +57,12 @@ private class TextFieldControl: Control {
     override var selectable: Bool { true }
 
     override func becomeFirstResponder() {
+        super.becomeFirstResponder()
         layer.invalidate()
     }
 
     override func resignFirstResponder() {
+        super.resignFirstResponder()
         layer.invalidate()
     }
 
