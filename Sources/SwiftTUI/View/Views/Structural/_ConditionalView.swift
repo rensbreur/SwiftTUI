@@ -39,12 +39,3 @@ public struct _ConditionalView<TrueContent: View, FalseContent: View>: View, Pri
         }
     }
 }
-
-extension View {
-    var nodeBuilder: NodeBuilder {
-        if let primitiveView = self as? Primitive {
-            return primitiveView
-        }
-        return Composed(view: self)
-    }
-}
