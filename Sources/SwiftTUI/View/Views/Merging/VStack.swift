@@ -1,6 +1,6 @@
 import Foundation
 
-public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
+public struct VStack<Content: View>: View, Primitive, ViewContainer {
     public let content: Content
     let alignment: HorizontalAlignment
     let spacing: Int?
@@ -26,14 +26,14 @@ public struct VStack<Content: View>: View, PrimitiveView, ViewContainer {
     }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
+        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
         node.control = VStackControl(alignment: alignment, spacing: spacing ?? 0)
         node.environment = { $0.stackOrientation = .vertical }
     }
 
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
-        node.children[0].update(using: ViewWrapper(view: content))
+        node.nodeBuilder = self
+        node.children[0].update(using: content.nodeBuilder)
         let control = node.control as! VStackControl
         control.alignment = alignment
         control.spacing = spacing ?? 0

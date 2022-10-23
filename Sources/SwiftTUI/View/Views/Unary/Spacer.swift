@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Spacer: View, PrimitiveView {
+public struct Spacer: View, Primitive {
     @Environment(\.stackOrientation) var stackOrientation
 
     public init() {}
@@ -8,11 +8,13 @@ public struct Spacer: View, PrimitiveView {
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
+        setupEnvironmentProperties(node: node)
         node.control = SpacerControl(orientation: stackOrientation)
     }
 
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
+        setupEnvironmentProperties(node: node)
+        node.nodeBuilder = self
         let control = node.control as! SpacerControl
         control.orientation = stackOrientation
     }

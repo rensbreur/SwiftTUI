@@ -6,20 +6,22 @@ public extension View {
     }
 }
 
-private struct Border<Content: View>: View, PrimitiveView, ControlMapper {
+private struct Border<Content: View>: View, Primitive, ControlMapper {
     let content: Content
     let color: Color?
     @Environment(\.foregroundColor) var foregroundColor: Color
 
-    static var size: Int? { ViewWrapper<Content>.size }
+    static var size: Int? { Content.size }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
+        setupEnvironmentProperties(node: node)
+        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
     }
 
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
-        node.children[0].update(using: ViewWrapper(view: content))
+        setupEnvironmentProperties(node: node)
+        node.nodeBuilder = self
+        node.children[0].update(using: content.nodeBuilder)
     }
 
     func passControl(_ control: Control) -> Control {

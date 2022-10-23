@@ -1,6 +1,6 @@
 import Foundation
 
-public struct TextField: View, PrimitiveView {
+public struct TextField: View, Primitive {
     public let action: (String) -> Void
 
     public init(action: @escaping (String) -> Void) {
@@ -14,7 +14,7 @@ public struct TextField: View, PrimitiveView {
     }
 
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
+        node.nodeBuilder = self
         (node.control as! TextFieldControl).action = action
     }
 }

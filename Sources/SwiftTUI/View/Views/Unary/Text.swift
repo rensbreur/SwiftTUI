@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Text: View, PrimitiveView {
+public struct Text: View, Primitive {
     let text: String
     @Environment(\.foregroundColor) var foregroundColor: Color
 
@@ -11,11 +11,13 @@ public struct Text: View, PrimitiveView {
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
+        setupEnvironmentProperties(node: node)
         node.control = TextControl(text: text, color: foregroundColor)
     }
     
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
+        setupEnvironmentProperties(node: node)
+        node.nodeBuilder = self
         let control = node.control as! TextControl
         control.text = text
         control.color = foregroundColor

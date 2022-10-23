@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ScrollView<Content: View>: View, PrimitiveView {
+public struct ScrollView<Content: View>: View, Primitive {
     let content: VStack<Content>
 
     public init(@ViewBuilder _ content: () -> Content) {
@@ -10,7 +10,7 @@ public struct ScrollView<Content: View>: View, PrimitiveView {
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
+        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
         let control = ScrollControl()
         control.contentControl = node.children[0].control(at: 0)
         control.addSubview(control.contentControl, at: 0)
@@ -18,8 +18,8 @@ public struct ScrollView<Content: View>: View, PrimitiveView {
     }
 
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
-        node.children[0].update(using: ViewWrapper(view: content))
+        node.nodeBuilder = self
+        node.children[0].update(using: content.nodeBuilder)
     }
 }
 

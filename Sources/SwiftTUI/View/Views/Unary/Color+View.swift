@@ -1,6 +1,6 @@
 import Foundation
 
-extension Color: View, PrimitiveView {
+extension Color: View, Primitive {
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
@@ -8,8 +8,8 @@ extension Color: View, PrimitiveView {
     }
 
     func updateNode(_ node: Node) {
-        let last = (node.viewWrapper as! ViewWrapper<Self>).view
-        node.viewWrapper = ViewWrapper(view: self)
+        let last = node.nodeBuilder as! Self
+        node.nodeBuilder = self
         if self != last {
             let control = node.control as! ColorControl
             control.color = self

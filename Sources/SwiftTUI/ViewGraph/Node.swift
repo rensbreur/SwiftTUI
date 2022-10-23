@@ -1,6 +1,8 @@
 import Foundation
 
-/// The node tree is the runtime representation of the views in an application.
+/// The node of a view graph.
+///
+/// The view graph is the runtime representation of the views in an application.
 /// Every view corresponds to a node. If a view is used in multiple places, in
 /// each of the places it is used it will have a seperate node.
 ///
@@ -10,7 +12,7 @@ import Foundation
 /// Note that the control tree more closely resembles the layout hierarchy,
 /// because structural views (ForEach, etc.) have their own node.
 final class Node {
-    var viewWrapper: AnyViewWrapper
+    var nodeBuilder: NodeBuilder
 
     var state: [String: Any] = [:]
     var environment: ((inout EnvironmentValues) -> Void)?
@@ -25,13 +27,13 @@ final class Node {
 
     private(set) var built = false
 
-    init(viewWrapper: AnyViewWrapper) {
-        self.viewWrapper = viewWrapper
+    init(nodeBuilder: NodeBuilder) {
+        self.nodeBuilder = nodeBuilder
     }
 
-    func update(using viewWrapper: AnyViewWrapper) {
+    func update(using nodeBuilder: NodeBuilder) {
         build()
-        viewWrapper.updateNode(self)
+        nodeBuilder.updateNode(self)
     }
 
     var root: Node { parent?.root ?? self }
@@ -39,7 +41,7 @@ final class Node {
     /// The total number of controls in the node.
     /// The node does not need to be fully built for the size to be computed.
     var size: Int {
-        if let size = type(of: viewWrapper).size { return size }
+        if let size = type(of: nodeBuilder).size { return size }
         build()
         return children.map(\.size).reduce(0, +)
     }
@@ -55,9 +57,9 @@ final class Node {
 
     func build() {
         if !built {
-            self.viewWrapper.buildNode(self)
+            self.nodeBuilder.buildNode(self)
             built = true
-            if let container = viewWrapper as? ViewContainer {
+            if let container = nodeBuilder as? ViewContainer {
                 container.loadData(node: self)
             }
         }
@@ -102,7 +104,7 @@ final class Node {
             let size = child.size
             if (offset - i) < size {
                 let control = child.control(at: offset - i)
-                if let modifier = self.viewWrapper as? ControlMapper {
+                if let modifier = self.nodeBuilder as? ControlMapper {
                     return modifier.passControl(control)
                 }
                 return control
@@ -115,7 +117,7 @@ final class Node {
     // MARK: - Container changes
 
     private func insertControl(at offset: Int) {
-        if let container = viewWrapper as? ViewContainer {
+        if let container = nodeBuilder as? ViewContainer {
             container.insertControl(at: offset, node: self)
             return
         }
@@ -123,7 +125,7 @@ final class Node {
     }
 
     private func removeControl(at offset: Int) {
-        if let container = viewWrapper as? ViewContainer {
+        if let container = nodeBuilder as? ViewContainer {
             container.removeControl(at: offset, node: self)
             return
         }

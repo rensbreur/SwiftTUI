@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Button: View, PrimitiveView {
+public struct Button: View, Primitive {
     public let n: String
     public let action: () -> Void
 
@@ -16,8 +16,8 @@ public struct Button: View, PrimitiveView {
     }
 
     func updateNode(_ node: Node) {
-        let last = (node.viewWrapper as! ViewWrapper<Self>).view
-        node.viewWrapper = ViewWrapper(view: self)
+        let last = node.nodeBuilder as! Self
+        node.nodeBuilder = self
         if self.n != last.n {
             let control = node.control as! ButtonControl
             control.text = n

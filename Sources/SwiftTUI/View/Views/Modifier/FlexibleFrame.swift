@@ -12,7 +12,7 @@ public extension View {
     }
 }
 
-private struct FlexibleFrame<Content: View>: View, PrimitiveView, ControlMapper {
+private struct FlexibleFrame<Content: View>: View, Primitive, ControlMapper {
     let content: Content
     let minWidth: Int?
     let maxWidth: Int?
@@ -20,15 +20,15 @@ private struct FlexibleFrame<Content: View>: View, PrimitiveView, ControlMapper 
     let maxHeight: Int?
     let alignment: Alignment
 
-    static var size: Int? { ViewWrapper<Content>.size }
+    static var size: Int? { Content.size }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
+        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
     }
 
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
-        node.children[0].update(using: ViewWrapper(view: content))
+        node.nodeBuilder = self
+        node.children[0].update(using: content.nodeBuilder)
     }
 
     func passControl(_ control: Control) -> Control {

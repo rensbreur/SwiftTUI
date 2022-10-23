@@ -12,7 +12,7 @@ public class Application {
     private var updateScheduled = false
 
     public init<I: View>(rootView: I) {
-        node = Node(viewWrapper: ViewWrapper(view: VStack(content: rootView)))
+        node = Node(nodeBuilder: VStack(content: rootView).nodeBuilder)
         node.build()
 
         control = node.control!
@@ -111,7 +111,7 @@ public class Application {
         updateScheduled = false
 
         for node in invalidatedNodes {
-            node.update(using: node.viewWrapper)
+            node.update(using: node.nodeBuilder)
         }
         invalidatedNodes = []
 

@@ -6,7 +6,7 @@ public extension View {
     }
 }
 
-private struct SetEnvironment<Content: View, T>: View, PrimitiveView {
+private struct SetEnvironment<Content: View, T>: View, Primitive {
     let content: Content
     let keyPath: WritableKeyPath<EnvironmentValues, T>
     let value: T
@@ -17,16 +17,16 @@ private struct SetEnvironment<Content: View, T>: View, PrimitiveView {
         self.value = value
     }
 
-    static var size: Int? { ViewWrapper<Content>.size }
+    static var size: Int? { Content.size }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
+        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
         node.environment = { $0[keyPath: keyPath] = value }
     }
 
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
-        node.children[0].update(using: ViewWrapper(view: content))
+        node.nodeBuilder = self
+        node.children[0].update(using: content.nodeBuilder)
         node.environment = { $0[keyPath: keyPath] = value }
     }
 

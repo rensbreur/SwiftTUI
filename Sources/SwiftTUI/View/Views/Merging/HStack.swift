@@ -1,6 +1,6 @@
 import Foundation
 
-public struct HStack<Content: View>: View, PrimitiveView, ViewContainer {
+public struct HStack<Content: View>: View, Primitive, ViewContainer {
     public let content: Content
     let alignment: VerticalAlignment
     let spacing: Int?
@@ -20,14 +20,14 @@ public struct HStack<Content: View>: View, PrimitiveView, ViewContainer {
     }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(viewWrapper: ViewWrapper(view: content)))
+        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
         node.control = HStackControl(alignment: alignment, spacing: spacing ?? 1)
         node.environment = { $0.stackOrientation = .horizontal }
     }
 
     func updateNode(_ node: Node) {
-        node.viewWrapper = ViewWrapper(view: self)
-        node.children[0].update(using: ViewWrapper(view: content))
+        node.nodeBuilder = self
+        node.children[0].update(using: content.nodeBuilder)
         let control = node.control as! HStackControl
         control.alignment = alignment
         control.spacing = spacing ?? 1
