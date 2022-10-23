@@ -1,6 +1,6 @@
 import Foundation
 
-public struct HStack<Content: View>: View, Primitive, ViewContainer {
+public struct HStack<Content: View>: View, Primitive, LayoutRoot {
     public let content: Content
     let alignment: VerticalAlignment
     let spacing: Int?
