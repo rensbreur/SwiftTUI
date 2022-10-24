@@ -1,6 +1,6 @@
 import Foundation
 
-struct Rect: Equatable, CustomStringConvertible {
+struct Rect: Equatable {
     var position: Position
     var size: Size
 
@@ -26,6 +26,22 @@ struct Rect: Equatable, CustomStringConvertible {
     var maxLine: Int { position.line + size.height - 1 }
     var maxColumn: Int { position.column + size.width - 1 }
 
-    var description: String { "\(position) \(size)" }
+    /// The smallest rectangle that contains the two source rectangles.
+    func union(_ r2: Rect) -> Rect {
+        Rect(minColumn: min(minColumn, r2.minColumn),
+             minLine: min(minLine, r2.minLine),
+             maxColumn: max(maxColumn, r2.maxColumn),
+             maxLine: max(maxLine, r2.maxLine))
+    }
 
+    func contains(_ position: Position) -> Bool {
+        position.column >= minColumn &&
+        position.line >= minLine &&
+        position.column <= maxColumn &&
+        position.line <= maxLine
+    }
+}
+
+extension Rect: CustomStringConvertible {
+    var description: String { "\(position) \(size)" }
 }

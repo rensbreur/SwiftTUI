@@ -46,7 +46,7 @@ class Layer {
             self.invalidated = rect
             return
         }
-        self.invalidated = Rect(minColumn: min(rect.minColumn, invalidated.minColumn), minLine: min(rect.minLine, invalidated.minLine), maxColumn: max(rect.maxColumn, invalidated.maxColumn), maxLine: max(rect.maxLine, invalidated.maxLine))
+        self.invalidated = rect.union(invalidated)
     }
 
     func cell(at position: Position) -> Cell? {
@@ -57,8 +57,8 @@ class Layer {
 
         // Draw children
         for child in children {
-            let position = Position(column: position.column - child.frame.position.column, line: position.line - child.frame.position.line)
-            guard position.line >= 0, position.column >= 0, position.column < child.frame.size.width, position.line < child.frame.size.height else { continue }
+            guard child.frame.contains(position) else { continue }
+            let position = position - child.frame.position
             if let cell = child.cell(at: position) {
                 if char == nil {
                     char = cell.char
