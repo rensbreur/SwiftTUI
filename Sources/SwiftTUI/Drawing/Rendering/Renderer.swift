@@ -81,7 +81,7 @@ class Renderer {
                 else { disableInverted() }
                 self.currentlyInverted = cell.inverted
             }
-            write(String(cell.char))
+            output(String(cell.char))
             self.currentPosition.column += 1
         }
     }
@@ -94,52 +94,46 @@ class Renderer {
     }
 
     private func clearScreen() {
-        write("\u{1b}[2J")
+        output("\u{1b}[2J")
     }
 
     private func enableAlternateBuffer() {
-        write("\u{1b}[?1049h")
+        output("\u{1b}[?1049h")
     }
 
     private func hideCursor() {
-        write("\u{1b}[?25l")
+        output("\u{1b}[?25l")
     }
 
     private func showCursor() {
-        write("\u{1b}[?25h")
+        output("\u{1b}[?25h")
     }
 
     private func setForegroundColor(_ color: Color) {
-        write("\u{1b}[\(color.foregroundCode)m")
+        output("\u{1b}[\(color.foregroundCode)m")
     }
 
     private func setBackgroundColor(_ color: Color) {
-        write("\u{1b}[\(color.backgroundCode)m")
+        output("\u{1b}[\(color.backgroundCode)m")
     }
 
     private func moveTo(_ position: Position) {
-        write("\u{1b}[\(position.line + 1);\(position.column + 1)H")
+        output("\u{1b}[\(position.line + 1);\(position.column + 1)H")
     }
 
     private func enableInverted() {
-        write("\u{1b}[7m")
+        output("\u{1b}[7m")
     }
 
     private func disableInverted() {
-        write("\u{1b}[27m")
+        output("\u{1b}[27m")
     }
 
     private func disableAlternateBuffer() {
-        write("\u{1b}[?1049l")
+        output("\u{1b}[?1049l")
     }
 
-    private func write(_ str: String) {
-        str.withCString {
-#if os(Linux)
-            _ = Glibc.write(STDOUT_FILENO, $0, strlen($0))
-#else
-            _ = Darwin.write(STDOUT_FILENO, $0, strlen($0))
-#endif
-        }
+    private func output(_ str: String) {
+        str.withCString { _ = write(STDOUT_FILENO, $0, strlen($0)) }
     }
 }
