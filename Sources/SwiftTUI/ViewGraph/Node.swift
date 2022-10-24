@@ -104,7 +104,7 @@ final class Node {
             let size = child.size
             if (offset - i) < size {
                 let control = child.control(at: offset - i)
-                if let modifier = self.nodeBuilder as? ControlMapper {
+                if let modifier = self.nodeBuilder as? Modifier {
                     return modifier.passControl(control)
                 }
                 return control
