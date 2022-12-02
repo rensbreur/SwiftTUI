@@ -44,6 +44,11 @@ public class Application {
         sigWinChSource.setEventHandler(qos: .default, flags: [], handler: self.handleWindowSizeChange)
         sigWinChSource.resume()
 
+        signal(SIGINT, SIG_IGN)
+        let sigIntSource = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
+        sigIntSource.setEventHandler(qos: .default, flags: [], handler: self.stop)
+        sigIntSource.resume()
+
         dispatchMain()
 
     }
@@ -87,9 +92,8 @@ public class Application {
                     window.firstResponder?.becomeFirstResponder()
                 }
             }
-        } else if char == 4 {
-            renderer.stop()
-            exit(0)
+        } else if char == ASCII.EOT {
+            stop()
         } else {
             window.firstResponder?.handleEvent(char)
         }
@@ -133,6 +137,11 @@ public class Application {
         }
         window.layer.frame.size = Size(width: Int(size.ws_col), height: Int(size.ws_row))
         renderer.setCache()
+    }
+
+    private func stop() {
+        renderer.stop()
+        exit(0)
     }
 
 }
