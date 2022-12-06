@@ -131,7 +131,8 @@ public class Application {
 
     private func updateWindowSize() {
         var size = winsize()
-        guard ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &size) == 0 else {
+        guard ioctl(STDOUT_FILENO, UInt(TIOCGWINSZ), &size) == 0,
+              size.ws_col > 0, size.ws_row > 0 else {
             assertionFailure("Could not get window size")
             return
         }
