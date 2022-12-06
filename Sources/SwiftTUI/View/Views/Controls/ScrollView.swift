@@ -27,14 +27,6 @@ private class ScrollControl: Control {
     var contentControl: Control!
     var contentOffset: Int = 0
 
-    override func cell(at position: Position) -> Cell? {
-        if position.column == layer.frame.size.width - 1,
-           position.line == layer.frame.size.height - 1 {
-            return Cell(char: "v", backgroundColor: .blue)
-        }
-        return Cell(char: " ", backgroundColor: .blue)
-    }
-
     override func layout(size: Size) {
         super.layout(size: size)
         let contentSize = contentControl.size(proposedSize: .zero)
