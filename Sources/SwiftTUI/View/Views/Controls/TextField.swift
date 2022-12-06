@@ -36,11 +36,15 @@ private class TextFieldControl: Control {
         let character = Character(.init(char))
         if character == "\n" {
             action(text)
+            self.text = ""
+            layer.invalidate()
             return
         }
-        if char == 127 {
-            self.text.removeLast()
-            layer.invalidate()
+        if char == ASCII.DEL {
+            if !self.text.isEmpty {
+                self.text.removeLast()
+                layer.invalidate()
+            }
             return
         }
         self.text += String(character)
