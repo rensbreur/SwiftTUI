@@ -26,18 +26,31 @@ public struct ScrollView<Content: View>: View, Primitive {
 private class ScrollControl: Control {
     var contentControl: Control!
     var contentOffset: Int = 0
+    var contentSize: Size = .zero
 
     override func cell(at position: Position) -> Cell? {
-        if position.column == layer.frame.size.width - 1,
-           position.line == layer.frame.size.height - 1 {
-            return Cell(char: "v", backgroundColor: .blue)
+
+        if position.column == layer.frame.size.width - 1 {
+            switch position.line {
+            case 0:
+                if contentOffset > 0 {
+                    return Cell(char: "Ʌ")
+                }
+            case layer.frame.size.height - 1:
+                if contentSize.height > self.layer.frame.size.height {
+                    return Cell(char: "V")
+                }
+            default:
+                break
+            }
         }
-        return Cell(char: " ", backgroundColor: .blue)
+
+        return Cell(char: " ")
     }
 
     override func layout(size: Size) {
         super.layout(size: size)
-        let contentSize = contentControl.size(proposedSize: .zero)
+        contentSize = contentControl.size(proposedSize: .zero)
         contentControl.layout(size: contentSize)
         contentControl.layer.frame.position.line = -contentOffset
     }
@@ -50,6 +63,10 @@ private class ScrollControl: Control {
         } else if contentOffset < destination - layer.frame.size.height + 1 {
             contentOffset = destination - layer.frame.size.height + 1
         }
+        // Here we would want to invalidate and redraw the ScrollControl if
+        // a) we are at end of scrolling (to remove arrow down)
+        // b) we just started scrolling (to add arrow up)
+        // c) we are at start scrolling (to remove arrow up)
+        // I don't know appropriate way to invalidate ourself...
     }
-
 }
