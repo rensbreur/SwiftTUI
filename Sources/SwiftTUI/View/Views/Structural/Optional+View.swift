@@ -1,6 +1,6 @@
 import Foundation
 
-extension Optional: View, Primitive, NodeBuilder where Wrapped: View {
+extension Optional: View, Primitive, NodeBuilder, OptionalView where Wrapped: View {
     public typealias Body = Never
 
     static var size: Int? {
@@ -29,3 +29,10 @@ extension Optional: View, Primitive, NodeBuilder where Wrapped: View {
         }
     }
 }
+
+/// We can use this non-generic protocol to check if a view is optional or not.
+///
+/// In particular, when checking if a view is of a particular type (e.g. a layout root) using
+/// Swift's `is` or `as?`, optional views can be implicitely unwrapped, so we explicitely need to
+/// make sure the view is not optional.
+protocol OptionalView {}

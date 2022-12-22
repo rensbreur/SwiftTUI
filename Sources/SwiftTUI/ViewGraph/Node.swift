@@ -59,7 +59,7 @@ final class Node {
         if !built {
             self.nodeBuilder.buildNode(self)
             built = true
-            if let container = nodeBuilder as? LayoutRoot {
+            if !(nodeBuilder is OptionalView), let container = nodeBuilder as? LayoutRoot {
                 container.loadData(node: self)
             }
         }
@@ -104,7 +104,7 @@ final class Node {
             let size = child.size
             if (offset - i) < size {
                 let control = child.control(at: offset - i)
-                if let modifier = self.nodeBuilder as? Modifier {
+                if !(nodeBuilder is OptionalView), let modifier = self.nodeBuilder as? Modifier {
                     return modifier.passControl(control)
                 }
                 return control
@@ -117,7 +117,7 @@ final class Node {
     // MARK: - Container changes
 
     private func insertControl(at offset: Int) {
-        if let container = nodeBuilder as? LayoutRoot {
+        if !(nodeBuilder is OptionalView), let container = nodeBuilder as? LayoutRoot {
             container.insertControl(at: offset, node: self)
             return
         }
@@ -125,7 +125,7 @@ final class Node {
     }
 
     private func removeControl(at offset: Int) {
-        if let container = nodeBuilder as? LayoutRoot {
+        if !(nodeBuilder is OptionalView), let container = nodeBuilder as? LayoutRoot {
             container.removeControl(at: offset, node: self)
             return
         }
