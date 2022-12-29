@@ -32,14 +32,14 @@ private class TextFieldControl: Control {
         return Size(width: text.count + 1, height: 1)
     }
 
-    override func handleEvent(_ char: UInt8) {
-        let character = Character(.init(char))
-        if character == "\n" {
+    override func handleEvent(_ char: Character) {
+        if char == "\n" {
             action(text)
             self.text = ""
             layer.invalidate()
             return
         }
+
         if char == ASCII.DEL {
             if !self.text.isEmpty {
                 self.text.removeLast()
@@ -47,7 +47,8 @@ private class TextFieldControl: Control {
             }
             return
         }
-        self.text += String(character)
+
+        self.text += String(char)
         layer.invalidate()
     }
 

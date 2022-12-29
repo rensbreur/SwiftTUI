@@ -72,7 +72,7 @@ class Control: LayerDrawing {
 
     // MARK: - Event handling
 
-    func handleEvent(_ char: UInt8) {
+    func handleEvent(_ char: Character) {
         for subview in children {
             subview.handleEvent(char)
         }

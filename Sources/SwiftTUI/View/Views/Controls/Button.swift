@@ -40,8 +40,7 @@ private class ButtonControl: Control {
         return Size(width: text.count, height: 1)
     }
 
-    override func handleEvent(_ char: UInt8) {
-        let char = Character(.init(char))
+    override func handleEvent(_ char: Character) {
         if char == "\n" || char == " " {
             action()
         }
