@@ -11,8 +11,6 @@ public class Application {
     private var invalidatedNodes: [Node] = []
     private var updateScheduled = false
 
-    private var stdInHandle: FileHandle?
-
     public init<I: View>(rootView: I) {
         node = Node(nodeBuilder: VStack(content: rootView).nodeBuilder)
         node.build()
