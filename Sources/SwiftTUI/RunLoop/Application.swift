@@ -61,41 +61,46 @@ public class Application {
     }
 
     private func handleInput() {
-        var char: UInt8 = 0
-        _ = read(STDIN_FILENO, &char, 1)
+        let data = FileHandle.standardInput.availableData
 
-        if arrowKeyParser.parse(character: char) {
-            guard let key = arrowKeyParser.arrowKey else { return }
-            arrowKeyParser.arrowKey = nil
-            if key == .down {
-                if let next = window.firstResponder?.selectableElement(below: 0) {
-                    window.firstResponder?.resignFirstResponder()
-                    window.firstResponder = next
-                    window.firstResponder?.becomeFirstResponder()
+        guard let string = String(data: data, encoding: .utf8) else {
+            return
+        }
+
+        for char in string {
+            if arrowKeyParser.parse(character: char) {
+                guard let key = arrowKeyParser.arrowKey else { continue }
+                arrowKeyParser.arrowKey = nil
+                if key == .down {
+                    if let next = window.firstResponder?.selectableElement(below: 0) {
+                        window.firstResponder?.resignFirstResponder()
+                        window.firstResponder = next
+                        window.firstResponder?.becomeFirstResponder()
+                    }
+                } else if key == .up {
+                    if let next = window.firstResponder?.selectableElement(above: 0) {
+                        window.firstResponder?.resignFirstResponder()
+                        window.firstResponder = next
+                        window.firstResponder?.becomeFirstResponder()
+                    }
+                } else if key == .right {
+                    if let next = window.firstResponder?.selectableElement(rightOf: 0) {
+                        window.firstResponder?.resignFirstResponder()
+                        window.firstResponder = next
+                        window.firstResponder?.becomeFirstResponder()
+                    }
+                } else if key == .left {
+                    if let next = window.firstResponder?.selectableElement(leftOf: 0) {
+                        window.firstResponder?.resignFirstResponder()
+                        window.firstResponder = next
+                        window.firstResponder?.becomeFirstResponder()
+                    }
                 }
-            } else if key == .up {
-                if let next = window.firstResponder?.selectableElement(above: 0) {
-                    window.firstResponder?.resignFirstResponder()
-                    window.firstResponder = next
-                    window.firstResponder?.becomeFirstResponder()
-                }
-            } else if key == .right {
-                if let next = window.firstResponder?.selectableElement(rightOf: 0) {
-                    window.firstResponder?.resignFirstResponder()
-                    window.firstResponder = next
-                    window.firstResponder?.becomeFirstResponder()
-                }
-            } else if key == .left {
-                if let next = window.firstResponder?.selectableElement(leftOf: 0) {
-                    window.firstResponder?.resignFirstResponder()
-                    window.firstResponder = next
-                    window.firstResponder?.becomeFirstResponder()
-                }
+            } else if char == ASCII.EOT {
+                stop()
+            } else {
+                window.firstResponder?.handleEvent(char)
             }
-        } else if char == ASCII.EOT {
-            stop()
-        } else {
-            window.firstResponder?.handleEvent(char)
         }
     }
 
