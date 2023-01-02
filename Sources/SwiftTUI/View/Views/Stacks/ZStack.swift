@@ -55,7 +55,7 @@ private class ZStackControl: Control {
 
     override func size(proposedSize: Size) -> Size {
         var size: Size = .zero
-        for control in children.sorted(by: { $0.verticalFlexibility(width: proposedSize.width) < $1.verticalFlexibility(width: proposedSize.width) }) {
+        for control in children {
             let childSize = control.size(proposedSize: Size(width: proposedSize.width, height: proposedSize.height))
             size.height = max(size.height, childSize.height)
             size.width = max(size.width, childSize.width)
@@ -65,7 +65,7 @@ private class ZStackControl: Control {
 
     override func layout(size: Size) {
         super.layout(size: size)
-        for control in children.sorted(by: { $0.verticalFlexibility(width: size.width) < $1.verticalFlexibility(width: size.width) }) {
+        for control in children {
             let childSize = control.size(proposedSize: Size(width: size.width, height: size.height))
             control.layout(size: childSize)
         }
