@@ -4,7 +4,7 @@ public struct ZStack<Content: View>: View, Primitive, LayoutRoot {
     public let content: Content
     let alignment: Alignment
 
-    public init(alignment: Alignment = .center, @ViewBuilder _ content: () -> Content) {
+    public init(alignment: Alignment = .topLeading, @ViewBuilder _ content: () -> Content) {
         self.content = content()
         self.alignment = alignment
     }
