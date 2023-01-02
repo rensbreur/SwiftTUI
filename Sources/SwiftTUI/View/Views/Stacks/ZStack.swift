@@ -17,8 +17,8 @@ public struct ZStack<Content: View>: View, Primitive, LayoutRoot {
     static var size: Int? { 1 }
 
     func loadData(node: Node) {
-        for i in 0 ..< node.children[0].size {
-            (node.control as! ZStackControl).addSubview(node.children[0].control(at: i), at: i)
+        for (subviewIndex, controlIndex) in (0 ..< node.children[0].size).reversed().enumerated() {
+            (node.control as! ZStackControl).addSubview(node.children[0].control(at: controlIndex), at: subviewIndex)
         }
     }
 
