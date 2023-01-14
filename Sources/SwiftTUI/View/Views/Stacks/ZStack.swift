@@ -17,8 +17,8 @@ public struct ZStack<Content: View>: View, Primitive, LayoutRoot {
     static var size: Int? { 1 }
 
     func loadData(node: Node) {
-        for (subviewIndex, controlIndex) in (0 ..< node.children[0].size).reversed().enumerated() {
-            (node.control as! ZStackControl).addSubview(node.children[0].control(at: controlIndex), at: subviewIndex)
+        for index in 0 ..< node.children[0].size {
+            (node.control as! ZStackControl).addSubview(node.children[0].control(at: index), at: index)
         }
     }
 
@@ -49,6 +49,16 @@ private class ZStackControl: Control {
 
     init(alignment: Alignment) {
         self.alignment = alignment
+    }
+
+    override func addSubview(_ view: Control, at index: Int) {
+        let reversedInsertionIndex = children.count - index
+        super.addSubview(view, at: reversedInsertionIndex)
+    }
+
+    override func removeSubview(at index: Int) {
+        let reversedRemovalIndex = (children.count - 1) - index
+        super.removeSubview(at: reversedRemovalIndex)
     }
 
     // MARK: - Layout
