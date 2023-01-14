@@ -59,6 +59,22 @@ private class ZStackControl: Control {
     override func removeSubview(at index: Int) {
         let reversedRemovalIndex = (children.count - 1) - index
         super.removeSubview(at: reversedRemovalIndex)
+        func shouldResignFirstResponder() -> Bool {
+            var selected = root.window?.firstResponder
+            while selected != nil {
+                if selected?.window == nil {
+                    selected = selected?.parent
+                } else {
+                    return false
+                }
+            }
+            return true
+        }
+        if shouldResignFirstResponder() {
+            root.window?.firstResponder?.resignFirstResponder()
+            root.window?.firstResponder = selectableElement(above: index) ?? selectableElement(below: index)
+            root.window?.firstResponder?.becomeFirstResponder()
+        }
     }
 
     // MARK: - Layout
