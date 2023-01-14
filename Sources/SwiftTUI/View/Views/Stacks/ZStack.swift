@@ -123,4 +123,26 @@ private class ZStackControl: Control {
         return super.selectableElement(above: index)
     }
 
+    override func selectableElement(rightOf index: Int) -> Control? {
+        var index = index - 1
+        while index >= 0 {
+            if let element = children[index].firstSelectableElement {
+                return element
+            }
+            index -= 1
+        }
+        return super.selectableElement(rightOf: index)
+    }
+
+    override func selectableElement(leftOf index: Int) -> Control? {
+        var index = index + 1
+        while index < children.count {
+            if let element = children[index].firstSelectableElement {
+                return element
+            }
+            index += 1
+        }
+        return super.selectableElement(leftOf: index)
+    }
+
 }
