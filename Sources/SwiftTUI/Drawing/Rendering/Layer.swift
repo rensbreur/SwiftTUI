@@ -56,7 +56,7 @@ class Layer {
         var backgroundColor: Color? = nil
 
         // Draw children
-        for child in children {
+        for child in children.reversed() {
             guard child.frame.contains(position) else { continue }
             let position = position - child.frame.position
             if let cell = child.cell(at: position) {
@@ -65,19 +65,23 @@ class Layer {
                     inverted = cell.inverted
                     foregroundColor = cell.foregroundColor
                 }
-                if let color = cell.backgroundColor { backgroundColor = color }
-                if char != nil && backgroundColor != nil { break }
+                if let color = cell.backgroundColor {
+                    backgroundColor = color
+                    break
+                }
             }
         }
 
         // Draw layer content as background
-        if (char == nil || backgroundColor == nil), let cell = content?.cell(at: position) {
+        if let cell = content?.cell(at: position) {
             if char == nil {
                 char = cell.char
                 inverted = cell.inverted
                 foregroundColor = cell.foregroundColor
             }
-            if backgroundColor == nil, let color = cell.backgroundColor { backgroundColor = color }
+            if backgroundColor == nil {
+                backgroundColor = cell.backgroundColor
+            }
         }
 
         return char.map { Cell(char: $0, foregroundColor: foregroundColor ?? .default, backgroundColor: backgroundColor, inverted: inverted) }
