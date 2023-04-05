@@ -24,7 +24,7 @@ class Control: LayerDrawing {
     }
 
     func removeSubview(at index: Int) {
-        if children[index].isFirstResponder {
+        if children[index].isFirstResponder || root.window?.firstResponder?.isDescendant(of: children[index]) == true {
             root.window?.firstResponder?.resignFirstResponder()
             root.window?.firstResponder = selectableElement(above: index) ?? selectableElement(below: index)
             root.window?.firstResponder?.becomeFirstResponder()
@@ -36,6 +36,11 @@ class Control: LayerDrawing {
         for i in index ..< children.count {
             children[i].index = i
         }
+    }
+
+    func isDescendant(of control: Control) -> Bool {
+        guard let parent else { return false }
+        return control === parent || parent.isDescendant(of: control)
     }
 
     func makeLayer() -> Layer {
