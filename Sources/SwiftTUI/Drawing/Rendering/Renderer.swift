@@ -16,6 +16,8 @@ class Renderer {
     private var currentForegroundColor: Color? = nil
     private var currentBackgroundColor: Color? = nil
 
+    private var currentFont: Font? = nil
+
     private var currentlyInverted: Bool = false
 
     weak var application: Application?
@@ -80,6 +82,9 @@ class Renderer {
                 setBackgroundColor(backgroundColor)
                 self.currentBackgroundColor = backgroundColor
             }
+            if self.currentFont != cell.font {
+                updateCurrentFont(new: cell.font)
+            }
             if self.currentlyInverted != cell.inverted {
                 if cell.inverted { enableInverted() }
                 else { disableInverted() }
@@ -123,6 +128,24 @@ class Renderer {
 
     private func moveTo(_ position: Position) {
         output("\u{1b}[\(position.line + 1);\(position.column + 1)H")
+    }
+
+    private func updateCurrentFont(new: Font) {
+        if currentFont?.isBold != new.isBold {
+            if new.isBold {
+                output("\u{1b}[1m")
+            } else {
+                output("\u{1b}[22m")
+            }
+        }
+        if currentFont?.isItalic != new.isItalic {
+            if new.isItalic {
+                output("\u{1b}[3m")
+            } else {
+                output("\u{1b}[23m")
+            }
+        }
+        currentFont = new   
     }
 
     private func enableInverted() {
