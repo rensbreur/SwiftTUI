@@ -9,12 +9,14 @@ struct Cell: Equatable {
     /// is used.
     var backgroundColor: Color?
 
+    var font: Font
     var inverted: Bool
 
-    init(char: Character, foregroundColor: Color = .default, backgroundColor: Color? = nil, inverted: Bool = false) {
+    init(char: Character, foregroundColor: Color = .default, backgroundColor: Color? = nil, font: Font = Font(), inverted: Bool = false) {
         self.char = char
         self.foregroundColor = foregroundColor
         self.backgroundColor = backgroundColor
+        self.font = font
         self.inverted = inverted
     }
 }

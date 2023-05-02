@@ -20,7 +20,7 @@ struct ToDoList: View {
 
     private var addToDo: some View {
         HStack {
-            Text("New to-do: ")
+            Text("New to-do: ").font(Font().italic())
                 TextField() { toDos.append(ToDo(text: $0)) }
             Spacer()
         }

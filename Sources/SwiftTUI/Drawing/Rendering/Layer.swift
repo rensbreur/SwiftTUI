@@ -54,6 +54,7 @@ class Layer {
         var inverted: Bool = false
         var foregroundColor: Color? = nil
         var backgroundColor: Color? = nil
+        var font: Font? = nil
 
         // Draw children
         for child in children.reversed() {
@@ -64,6 +65,7 @@ class Layer {
                     char = cell.char
                     inverted = cell.inverted
                     foregroundColor = cell.foregroundColor
+                    font = cell.font
                 }
                 if let color = cell.backgroundColor {
                     backgroundColor = color
@@ -78,13 +80,14 @@ class Layer {
                 char = cell.char
                 inverted = cell.inverted
                 foregroundColor = cell.foregroundColor
+                font = cell.font
             }
             if backgroundColor == nil {
                 backgroundColor = cell.backgroundColor
             }
         }
 
-        return char.map { Cell(char: $0, foregroundColor: foregroundColor ?? .default, backgroundColor: backgroundColor, inverted: inverted) }
+        return char.map { Cell(char: $0, foregroundColor: foregroundColor ?? .default, backgroundColor: backgroundColor, font: font ?? Font(), inverted: inverted) }
     }
 
 }
