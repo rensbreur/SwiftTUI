@@ -80,7 +80,7 @@ private class BorderControl: Control {
         } else if position.column == 0 || position.column == layer.frame.size.width - 1 {
             char = "│"
         }
-        return char.map { Cell(char: $0, foregroundColor: color) }
+        return char.map { Cell(char: $0, attributes: AttributeContainer().foregroundColor(color)) }
     }
 
 }

@@ -13,12 +13,7 @@ class Renderer {
     /// printing.
     private var currentPosition: Position = .zero
 
-    private var currentForegroundColor: Color? = nil
-    private var currentBackgroundColor: Color? = nil
-
-    private var currentFont: Font? = nil
-
-    private var currentlyInverted: Bool = false
+    private var currentAttributes: AttributeContainer = AttributeContainer()
 
     weak var application: Application?
 
@@ -73,22 +68,8 @@ class Renderer {
                 moveTo(position)
                 self.currentPosition = position
             }
-            if self.currentForegroundColor != cell.foregroundColor {
-                setForegroundColor(cell.foregroundColor)
-                self.currentForegroundColor = cell.foregroundColor
-            }
-            let backgroundColor = cell.backgroundColor ?? .default
-            if self.currentBackgroundColor != backgroundColor {
-                setBackgroundColor(backgroundColor)
-                self.currentBackgroundColor = backgroundColor
-            }
-            if self.currentFont != cell.font {
-                updateCurrentFont(new: cell.font)
-            }
-            if self.currentlyInverted != cell.inverted {
-                if cell.inverted { enableInverted() }
-                else { disableInverted() }
-                self.currentlyInverted = cell.inverted
+            if self.currentAttributes != cell.attributes {
+                updateCurrentAttributes(new: cell.attributes)
             }
             output(String(cell.char))
             self.currentPosition.column += 1
@@ -118,42 +99,41 @@ class Renderer {
         output("\u{1b}[?25h")
     }
 
-    private func setForegroundColor(_ color: Color) {
-        output("\u{1b}[\(color.foregroundCode)m")
-    }
-
-    private func setBackgroundColor(_ color: Color) {
-        output("\u{1b}[\(color.backgroundCode)m")
-    }
-
     private func moveTo(_ position: Position) {
         output("\u{1b}[\(position.line + 1);\(position.column + 1)H")
     }
 
-    private func updateCurrentFont(new: Font) {
-        if currentFont?.isBold != new.isBold {
-            if new.isBold {
+    private func updateCurrentAttributes(new: AttributeContainer) {
+        if currentAttributes.foregroundColor != new.foregroundColor {
+            let color = new.foregroundColor ?? .default
+            output("\u{1b}[\(color.foregroundCode)m")
+        }
+        if currentAttributes.backgroundColor != new.backgroundColor {
+            let color = new.backgroundColor ?? .default
+            output("\u{1b}[\(color.backgroundCode)m")
+        }
+        if currentAttributes.font?.isBold != new.font?.isBold {
+            if new.font?.isBold == true {
                 output("\u{1b}[1m")
             } else {
                 output("\u{1b}[22m")
             }
         }
-        if currentFont?.isItalic != new.isItalic {
-            if new.isItalic {
+        if currentAttributes.font?.isItalic != new.font?.isItalic {
+            if new.font?.isItalic == true {
                 output("\u{1b}[3m")
             } else {
                 output("\u{1b}[23m")
             }
         }
-        currentFont = new   
-    }
-
-    private func enableInverted() {
-        output("\u{1b}[7m")
-    }
-
-    private func disableInverted() {
-        output("\u{1b}[27m")
+        if self.currentAttributes.inverted != new.inverted {
+            if new.inverted == true {
+                output("\u{1b}[7m")
+            } else {
+                output("\u{1b}[27m")
+            }
+        }
+        currentAttributes = new
     }
 
     private func disableAlternateBuffer() {

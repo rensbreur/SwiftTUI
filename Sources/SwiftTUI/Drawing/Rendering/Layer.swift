@@ -51,10 +51,11 @@ class Layer {
 
     func cell(at position: Position) -> Cell? {
         var char: Character? = nil
-        var inverted: Bool = false
-        var foregroundColor: Color? = nil
-        var backgroundColor: Color? = nil
-        var font: Font? = nil
+        var attributes: AttributeContainer = AttributeContainer()
+
+        // When attributes.backgroundColor is nil, it does not mean the default background color.
+        // Rather, it means that the background color from the content below
+        // is used.
 
         // Draw children
         for child in children.reversed() {
@@ -63,12 +64,10 @@ class Layer {
             if let cell = child.cell(at: position) {
                 if char == nil {
                     char = cell.char
-                    inverted = cell.inverted
-                    foregroundColor = cell.foregroundColor
-                    font = cell.font
+                    attributes = cell.attributes
                 }
-                if let color = cell.backgroundColor {
-                    backgroundColor = color
+                if let color = cell.attributes.backgroundColor {
+                    attributes = attributes.backgroundColor(color)
                     break
                 }
             }
@@ -78,16 +77,14 @@ class Layer {
         if let cell = content?.cell(at: position) {
             if char == nil {
                 char = cell.char
-                inverted = cell.inverted
-                foregroundColor = cell.foregroundColor
-                font = cell.font
+                attributes = cell.attributes
             }
-            if backgroundColor == nil {
-                backgroundColor = cell.backgroundColor
+            if attributes.backgroundColor == nil, let backgroundColor = cell.attributes.backgroundColor {
+                attributes = attributes.backgroundColor(backgroundColor)
             }
         }
 
-        return char.map { Cell(char: $0, foregroundColor: foregroundColor ?? .default, backgroundColor: backgroundColor, font: font ?? Font(), inverted: inverted) }
+        return char.map { Cell(char: $0, attributes: attributes) }
     }
 
 }

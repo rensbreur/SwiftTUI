@@ -47,7 +47,7 @@ private class BackgroundControl: Control {
     }
 
     override func cell(at position: Position) -> Cell? {
-        Cell(char: " ", backgroundColor: color)
+        Cell(char: " ", attributes: AttributeContainer().backgroundColor(color))
     }
 
 }
