@@ -11,6 +11,11 @@ public struct Text: View, Primitive {
         self.textAttributes = Array(repeating: AttributeContainer(), count: text.count)
     }
 
+    public init(_ attributedText: AttributedString) {
+        self.text = String(attributedText.characters)
+        self.textAttributes = Self.charsAttributes(from: attributedText)
+    }
+
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
