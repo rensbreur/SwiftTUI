@@ -5,6 +5,8 @@ public struct Text: View, Primitive {
     let textAttributes: [AttributeContainer]
     @Environment(\.foregroundColor) var foregroundColor: Color
     @Environment(\.font) var font: Font
+    @Environment(\.strikethrough) var strikethrough: Bool
+    @Environment(\.underline) var underline: Bool
 
     public init(_ text: String) {
         self.text = text
@@ -44,12 +46,14 @@ private extension Text {
 
     /// Creates an array by merging _view_ and text attributes.
     func cellsAttributes() -> [AttributeContainer] {
-        var viewAttributes: AttributeContainer = AttributeContainer()
+        var viewAttributes = AttributeContainer()
         viewAttributes.font = font
         viewAttributes.foregroundColor = foregroundColor
+        viewAttributes.strikethroughStyle = LineStyle(underlineStyle: strikethrough ? .single : .none)
+        viewAttributes.underlineStyle = LineStyle(underlineStyle: underline ? .single : .none)
         return textAttributes.map { container in
             var container = container
-            container.merge(viewAttributes, mergePolicy: AttributedString.AttributeMergePolicy.keepCurrent)
+            container.merge(viewAttributes, mergePolicy: .keepCurrent)
             return container
         }
     }

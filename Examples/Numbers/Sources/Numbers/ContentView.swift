@@ -1,7 +1,10 @@
+import Foundation
 import SwiftTUI
 
 struct ContentView: View {
     @State var counter = 1
+
+    let numberAttributes = AttributeContainer().underlineStyle(Text.LineStyle(pattern: .solid))
 
     var body: some View {
         VStack {
@@ -10,7 +13,7 @@ struct ContentView: View {
                 Button("Remove number") { counter -= 1 }
             }
             ForEach(1 ... counter, id: \.self) { i in
-                Text("Number \(i)")
+                Text(AttributedString("Number ") + AttributedString("\(i)", attributes: numberAttributes))
             }
             .border()
         }

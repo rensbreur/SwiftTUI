@@ -126,6 +126,20 @@ class Renderer {
                 output("\u{1b}[23m")
             }
         }
+        if currentAttributes.underlineStyle != new.underlineStyle {
+            if new.underlineStyle != nil {
+                output("\u{1b}[4m")
+            } else {
+                output("\u{1b}[24m")
+            }
+        }
+        if currentAttributes.strikethroughStyle != new.strikethroughStyle {
+            if new.strikethroughStyle != nil {
+                output("\u{1b}[9m")
+            } else {
+                output("\u{1b}[29m")
+            }
+        }
         if self.currentAttributes.inverted != new.inverted {
             if new.inverted == true {
                 output("\u{1b}[7m")

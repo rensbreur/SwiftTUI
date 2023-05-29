@@ -11,6 +11,9 @@ extension AttributeScopes {
         public typealias DecodingConfiguration = AttributeScopeCodableConfiguration
         public typealias EncodingConfiguration = AttributeScopeCodableConfiguration
 
+        public let strikethroughStyle: StrikethroughStyleAttribute = StrikethroughStyleAttribute()
+        public let underlineStyle: UnderlineStyleAttribute = UnderlineStyleAttribute()
+
         let inverted: InvertedAttribute = InvertedAttribute()
     }
 }
@@ -31,6 +34,16 @@ extension AttributeScopes.SwiftTUIAttributes {
         public static let name = "Font"
     }
     
+    public struct StrikethroughStyleAttribute: AttributedStringKey {
+        public typealias Value = Text.LineStyle
+        public static let name = "StrikethroughStyle"
+    }
+
+    public struct UnderlineStyleAttribute: AttributedStringKey {
+        public typealias Value = Text.LineStyle
+        public static let name = "UnderlineStyle"
+    }
+
     struct InvertedAttribute: AttributedStringKey {
         typealias Value = Bool
         static let name = "Inverted"
