@@ -1,7 +1,12 @@
 import Foundation
 
 public struct Text: View, Primitive {
-    let text: String
+    private var text: String?
+
+    private var _attributedText: Any?
+
+    @available(macOS 12, *)
+    private var attributedText: AttributedString? { _attributedText as? AttributedString }
 
     @Environment(\.foregroundColor) private var foregroundColor: Color
     @Environment(\.bold) private var bold: Bool
@@ -13,12 +18,18 @@ public struct Text: View, Primitive {
         self.text = text
     }
 
+    @available(macOS 12, *)
+    public init(_ attributedText: AttributedString) {
+        self._attributedText = attributedText
+    }
+
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
         setupEnvironmentProperties(node: node)
         node.control = TextControl(
             text: text,
+            attributedText: _attributedText,
             foregroundColor: foregroundColor,
             bold: bold,
             italic: italic,
@@ -26,12 +37,13 @@ public struct Text: View, Primitive {
             strikethrough: strikethrough
         )
     }
-    
+
     func updateNode(_ node: Node) {
         setupEnvironmentProperties(node: node)
         node.nodeBuilder = self
         let control = node.control as! TextControl
         control.text = text
+        control._attributedText = _attributedText
         control.foregroundColor = foregroundColor
         control.bold = bold
         control.italic = italic
@@ -42,8 +54,12 @@ public struct Text: View, Primitive {
 }
 
 private class TextControl: Control {
-    var text: String
+    var text: String?
 
+    var _attributedText: Any?
+
+    @available(macOS 12, *)
+    var attributedText: AttributedString? { _attributedText as? AttributedString }
 
     var foregroundColor: Color
     var bold: Bool
@@ -52,7 +68,8 @@ private class TextControl: Control {
     var strikethrough: Bool
 
     init(
-        text: String,
+        text: String?,
+        attributedText: Any?,
         foregroundColor: Color,
         bold: Bool,
         italic: Bool,
@@ -60,6 +77,7 @@ private class TextControl: Control {
         strikethrough: Bool
     ) {
         self.text = text
+        self._attributedText = attributedText
         self.foregroundColor = foregroundColor
         self.bold = bold
         self.italic = italic
@@ -68,22 +86,50 @@ private class TextControl: Control {
     }
 
     override func size(proposedSize: Size) -> Size {
-        return Size(width: text.count, height: 1)
+        return Size(width: characterCount, height: 1)
     }
 
     override func cell(at position: Position) -> Cell? {
         guard position.line == 0 else { return nil }
-        guard position.column < text.count else { return .init(char: " ") }
-        let cellAttributes = CellAttributes(
-            bold: bold,
-            italic: italic,
-            underline: underline,
-            strikethrough: strikethrough
-        )
-        return Cell(
-            char: text[text.index(text.startIndex, offsetBy: position.column)],
-            foregroundColor: foregroundColor,
-            attributes: cellAttributes
-        )
+        guard position.column < characterCount else { return .init(char: " ") }
+        if #available(macOS 12, *), let attributedText {
+            let characters = attributedText.characters
+            let i = characters.index(characters.startIndex, offsetBy: position.column)
+            let char = attributedText[i ..< characters.index(after: i)]
+            let cellAttributes = CellAttributes(
+                bold: char.bold ?? bold,
+                italic: char.italic ?? italic,
+                underline: char.underline ?? underline,
+                strikethrough: char.strikethrough ?? strikethrough,
+                inverted: char.inverted ?? false
+            )
+            return Cell(
+                char: char.characters[char.startIndex],
+                foregroundColor: char.foregroundColor ?? foregroundColor,
+                backgroundColor: char.backgroundColor,
+                attributes: cellAttributes
+            )
+        }
+        if let text {
+            let cellAttributes = CellAttributes(
+                bold: bold,
+                italic: italic,
+                underline: underline,
+                strikethrough: strikethrough
+            )
+            return Cell(
+                char: text[text.index(text.startIndex, offsetBy: position.column)],
+                foregroundColor: foregroundColor,
+                attributes: cellAttributes
+            )
+        }
+        return nil
+    }
+
+    private var characterCount: Int {
+        if #available(macOS 12, *), let attributedText {
+            return attributedText.characters.count
+        }
+        return text?.count ?? 0
     }
 }

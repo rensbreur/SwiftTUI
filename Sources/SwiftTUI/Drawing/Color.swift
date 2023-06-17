@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Color: Equatable {
+public struct Color: Hashable {
     let foregroundCode: Int
     let backgroundCode: Int
 
