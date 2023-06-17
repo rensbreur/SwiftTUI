@@ -49,9 +49,10 @@ private class ButtonControl: Control {
     override func cell(at position: Position) -> Cell? {
         guard position.line == 0 else { return nil }
         guard position.column < text.count else { return .init(char: " ") }
-        var cell = Cell(char: text[text.index(text.startIndex, offsetBy: position.column)])
-        cell.inverted = isFirstResponder
-        return cell
+        return Cell(
+            char: text[text.index(text.startIndex, offsetBy: position.column)],
+            attributes: CellAttributes(inverted: isFirstResponder)
+        )
     }
 
     override var selectable: Bool { true }

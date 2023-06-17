@@ -16,9 +16,7 @@ class Renderer {
     private var currentForegroundColor: Color? = nil
     private var currentBackgroundColor: Color? = nil
 
-    private var currentFont: Font? = nil
-
-    private var currentlyInverted: Bool = false
+    private var currentAttributes = CellAttributes()
 
     weak var application: Application?
 
@@ -82,14 +80,7 @@ class Renderer {
                 setBackgroundColor(backgroundColor)
                 self.currentBackgroundColor = backgroundColor
             }
-            if self.currentFont != cell.font {
-                updateCurrentFont(new: cell.font)
-            }
-            if self.currentlyInverted != cell.inverted {
-                if cell.inverted { enableInverted() }
-                else { disableInverted() }
-                self.currentlyInverted = cell.inverted
-            }
+            self.updateAttributes(cell.attributes)
             output(String(cell.char))
             self.currentPosition.column += 1
         }
@@ -130,22 +121,60 @@ class Renderer {
         output("\u{1b}[\(position.line + 1);\(position.column + 1)H")
     }
 
-    private func updateCurrentFont(new: Font) {
-        if currentFont?.isBold != new.isBold {
-            if new.isBold {
-                output("\u{1b}[1m")
-            } else {
-                output("\u{1b}[22m")
-            }
+    private func updateAttributes(_ attributes: CellAttributes) {
+        if currentAttributes.bold != attributes.bold {
+            if attributes.bold { enableBold() }
+            else { disableBold() }
         }
-        if currentFont?.isItalic != new.isItalic {
-            if new.isItalic {
-                output("\u{1b}[3m")
-            } else {
-                output("\u{1b}[23m")
-            }
+        if currentAttributes.italic != attributes.italic {
+            if attributes.italic { enableItalic() }
+            else { disableItalic() }
         }
-        currentFont = new   
+        if currentAttributes.underline != attributes.underline {
+            if attributes.underline { enableUnderline() }
+            else { disableUnderline() }
+        }
+        if currentAttributes.strikethrough != attributes.strikethrough {
+            if attributes.strikethrough { enableStrikethrough() }
+            else { disableStrikethrough() }
+        }
+        if currentAttributes.inverted != attributes.inverted {
+            if attributes.inverted { enableInverted() }
+            else { disableInverted() }
+        }
+        currentAttributes = attributes
+    }
+
+    private func enableBold() {
+        output("\u{1b}[1m")
+    }
+
+    private func disableBold() {
+        output("\u{1b}[22m")
+    }
+
+    private func enableItalic() {
+        output("\u{1b}[3m")
+    }
+
+    private func disableItalic() {
+        output("\u{1b}[23m")
+    }
+
+    private func enableUnderline() {
+        output("\u{1b}[4m")
+    }
+
+    private func disableUnderline() {
+        output("\u{1b}[24m")
+    }
+
+    private func enableStrikethrough() {
+        output("\u{1b}[9m")
+    }
+
+    private func disableStrikethrough() {
+        output("\u{1b}[29m")
     }
 
     private func enableInverted() {

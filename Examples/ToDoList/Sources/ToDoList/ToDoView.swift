@@ -11,10 +11,11 @@ struct ToDoView: View {
         HStack {
             if deleting {
                 Text("[x]")
+                Text(toDo.text).strikethrough()
             } else {
                 Button("[ ]", action: delete)
+                Text(toDo.text)
             }
-            Text(toDo.text)
         }
     }
 
