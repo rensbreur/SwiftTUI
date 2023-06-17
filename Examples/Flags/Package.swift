@@ -5,7 +5,7 @@ import PackageDescription
 let package = Package(
     name: "Flags",
     platforms: [
-        .macOS(.v11)
+        .macOS(.v12)
     ],
     dependencies: [
         .package(path: "../../")
