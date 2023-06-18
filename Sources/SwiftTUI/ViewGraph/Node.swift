@@ -59,7 +59,7 @@ final class Node {
         if !built {
             self.view.buildNode(self)
             built = true
-            if !(view is OptionalView), let container = view as? LayoutRoot {
+            if !(view is OptionalView), let container = view as? LayoutRootView {
                 container.loadData(node: self)
             }
         }
@@ -117,7 +117,7 @@ final class Node {
     // MARK: - Container changes
 
     private func insertControl(at offset: Int) {
-        if !(view is OptionalView), let container = view as? LayoutRoot {
+        if !(view is OptionalView), let container = view as? LayoutRootView {
             container.insertControl(at: offset, node: self)
             return
         }
@@ -125,7 +125,7 @@ final class Node {
     }
 
     private func removeControl(at offset: Int) {
-        if !(view is OptionalView), let container = view as? LayoutRoot {
+        if !(view is OptionalView), let container = view as? LayoutRootView {
             container.removeControl(at: offset, node: self)
             return
         }
