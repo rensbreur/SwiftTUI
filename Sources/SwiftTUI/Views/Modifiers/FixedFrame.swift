@@ -37,42 +37,40 @@ private struct FixedFrame<Content: View>: View, PrimitiveView, ModifierView {
         return fixedFrameControl
     }
 
-}
+    private class FixedFrameControl: Control {
+        var width: Int?
+        var height: Int?
+        var alignment: Alignment
 
-private class FixedFrameControl: Control {
-    var width: Int?
-    var height: Int?
-    var alignment: Alignment
-
-    init(width: Int?, height: Int?, alignment: Alignment) {
-        self.width = width
-        self.height = height
-        self.alignment = alignment
-    }
-
-    override func size(proposedSize: Size) -> Size {
-        var proposedSize = proposedSize
-        proposedSize.width = width ?? proposedSize.width
-        proposedSize.height = height ?? proposedSize.height
-        var size = children[0].size(proposedSize: proposedSize)
-        size.width = width ?? size.width
-        size.height = height ?? size.height
-        return size
-    }
-
-    override func layout(size: Size) {
-        super.layout(size: size)
-        children[0].layout(size: children[0].size(proposedSize: size))
-        switch alignment.verticalAlignment {
-        case .top: children[0].layer.frame.position.line = 0
-        case .center: children[0].layer.frame.position.line = (size.height - children[0].layer.frame.size.height) / 2
-        case .bottom: children[0].layer.frame.position.line = size.height - children[0].layer.frame.size.height
+        init(width: Int?, height: Int?, alignment: Alignment) {
+            self.width = width
+            self.height = height
+            self.alignment = alignment
         }
-        switch alignment.horizontalAlignment {
-        case .leading: children[0].layer.frame.position.column = 0
-        case .center: children[0].layer.frame.position.column = (size.width - children[0].layer.frame.size.width) / 2
-        case .trailing: children[0].layer.frame.position.column = size.width - children[0].layer.frame.size.width
+
+        override func size(proposedSize: Size) -> Size {
+            var proposedSize = proposedSize
+            proposedSize.width = width ?? proposedSize.width
+            proposedSize.height = height ?? proposedSize.height
+            var size = children[0].size(proposedSize: proposedSize)
+            size.width = width ?? size.width
+            size.height = height ?? size.height
+            return size
+        }
+
+        override func layout(size: Size) {
+            super.layout(size: size)
+            children[0].layout(size: children[0].size(proposedSize: size))
+            switch alignment.verticalAlignment {
+            case .top: children[0].layer.frame.position.line = 0
+            case .center: children[0].layer.frame.position.line = (size.height - children[0].layer.frame.size.height) / 2
+            case .bottom: children[0].layer.frame.position.line = size.height - children[0].layer.frame.size.height
+            }
+            switch alignment.horizontalAlignment {
+            case .leading: children[0].layer.frame.position.column = 0
+            case .center: children[0].layer.frame.position.column = (size.width - children[0].layer.frame.size.width) / 2
+            case .trailing: children[0].layer.frame.position.column = size.width - children[0].layer.frame.size.width
+            }
         }
     }
-
 }

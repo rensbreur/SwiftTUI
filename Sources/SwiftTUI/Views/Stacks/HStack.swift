@@ -41,82 +41,80 @@ public struct HStack<Content: View>: View, PrimitiveView, LayoutRootView {
         (node.control as! HStackControl).removeSubview(at: index)
     }
 
-}
+    private class HStackControl: Control {
+        var alignment: VerticalAlignment
+        var spacing: Int
 
-private class HStackControl: Control {
-    var alignment: VerticalAlignment
-    var spacing: Int
-
-    init(alignment: VerticalAlignment, spacing: Int) {
-        self.alignment = alignment
-        self.spacing = spacing
-    }
-
-    // MARK: - Layout
-
-    override func size(proposedSize: Size) -> Size {
-        var size: Size = .zero
-        var remainingItems = children.count
-        for control in children.sorted(by: { $0.horizontalFlexibility(height: proposedSize.height) < $1.horizontalFlexibility(height: proposedSize.height) }) {
-            let childSize = control.size(proposedSize: Size(width: (proposedSize.width - size.width) / remainingItems, height: proposedSize.height))
-            size.width += childSize.width
-            if remainingItems > 1 {
-                size.width += spacing
-            }
-            size.height = max(size.height, childSize.height)
-            remainingItems -= 1
+        init(alignment: VerticalAlignment, spacing: Int) {
+            self.alignment = alignment
+            self.spacing = spacing
         }
-        return size
-    }
 
-    override func layout(size: Size) {
-        super.layout(size: size)
-        var remainingItems = children.count
-        var remainingWidth = size.width
-        for control in children.sorted(by: { $0.horizontalFlexibility(height: size.height) < $1.horizontalFlexibility(height: size.height) }) {
-            let childSize = control.size(proposedSize: Size(width: remainingWidth / remainingItems, height: size.height))
-            control.layout(size: childSize)
-            if remainingItems > 1 {
-                remainingWidth -= spacing
+        // MARK: - Layout
+
+        override func size(proposedSize: Size) -> Size {
+            var size: Size = .zero
+            var remainingItems = children.count
+            for control in children.sorted(by: { $0.horizontalFlexibility(height: proposedSize.height) < $1.horizontalFlexibility(height: proposedSize.height) }) {
+                let childSize = control.size(proposedSize: Size(width: (proposedSize.width - size.width) / remainingItems, height: proposedSize.height))
+                size.width += childSize.width
+                if remainingItems > 1 {
+                    size.width += spacing
+                }
+                size.height = max(size.height, childSize.height)
+                remainingItems -= 1
             }
-            remainingItems -= 1
-            remainingWidth -= childSize.width
+            return size
         }
-        var column = 0
-        for control in children {
-            control.layer.frame.position.column = column
-            column += control.layer.frame.size.width
-            column += spacing
-            switch alignment {
-            case .top: control.layer.frame.position.line = 0
-            case .center: control.layer.frame.position.line = (size.height - control.layer.frame.size.height) / 2
-            case .bottom: control.layer.frame.position.line = size.height - control.layer.frame.size.height
+
+        override func layout(size: Size) {
+            super.layout(size: size)
+            var remainingItems = children.count
+            var remainingWidth = size.width
+            for control in children.sorted(by: { $0.horizontalFlexibility(height: size.height) < $1.horizontalFlexibility(height: size.height) }) {
+                let childSize = control.size(proposedSize: Size(width: remainingWidth / remainingItems, height: size.height))
+                control.layout(size: childSize)
+                if remainingItems > 1 {
+                    remainingWidth -= spacing
+                }
+                remainingItems -= 1
+                remainingWidth -= childSize.width
             }
+            var column = 0
+            for control in children {
+                control.layer.frame.position.column = column
+                column += control.layer.frame.size.width
+                column += spacing
+                switch alignment {
+                case .top: control.layer.frame.position.line = 0
+                case .center: control.layer.frame.position.line = (size.height - control.layer.frame.size.height) / 2
+                case .bottom: control.layer.frame.position.line = size.height - control.layer.frame.size.height
+                }
+            }
+        }
+
+        // MARK: - Selection
+
+        override func selectableElement(rightOf index: Int) -> Control? {
+            var index = index + 1
+            while index < children.count {
+                if let element = children[index].firstSelectableElement {
+                    return element
+                }
+                index += 1
+            }
+            return super.selectableElement(rightOf: index)
+        }
+
+        override func selectableElement(leftOf index: Int) -> Control? {
+            var index = index - 1
+            while index >= 0 {
+                if let element = children[index].firstSelectableElement {
+                    return element
+                }
+                index -= 1
+            }
+            return super.selectableElement(leftOf: index)
         }
     }
-
-    // MARK: - Selection
-    
-    override func selectableElement(rightOf index: Int) -> Control? {
-        var index = index + 1
-        while index < children.count {
-            if let element = children[index].firstSelectableElement {
-                return element
-            }
-            index += 1
-        }
-        return super.selectableElement(rightOf: index)
-    }
-
-    override func selectableElement(leftOf index: Int) -> Control? {
-        var index = index - 1
-        while index >= 0 {
-            if let element = children[index].firstSelectableElement {
-                return element
-            }
-            index -= 1
-        }
-        return super.selectableElement(leftOf: index)
-    }
-
 }

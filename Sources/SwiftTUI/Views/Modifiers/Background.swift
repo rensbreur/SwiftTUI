@@ -28,26 +28,24 @@ private struct Background<Content: View>: View, PrimitiveView, ModifierView {
         return borderControl
     }
 
-}
+    private class BackgroundControl: Control {
+        var color: Color
 
-private class BackgroundControl: Control {
-    var color: Color
+        init(color: Color) {
+            self.color = color
+        }
 
-    init(color: Color) {
-        self.color = color
+        override func size(proposedSize: Size) -> Size {
+            children[0].size(proposedSize: proposedSize)
+        }
+
+        override func layout(size: Size) {
+            super.layout(size: size)
+            children[0].layout(size: size)
+        }
+
+        override func cell(at position: Position) -> Cell? {
+            Cell(char: " ", backgroundColor: color)
+        }
     }
-
-    override func size(proposedSize: Size) -> Size {
-        children[0].size(proposedSize: proposedSize)
-    }
-
-    override func layout(size: Size) {
-        super.layout(size: size)
-        children[0].layout(size: size)
-    }
-
-    override func cell(at position: Position) -> Cell? {
-        Cell(char: " ", backgroundColor: color)
-    }
-
 }
