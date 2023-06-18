@@ -6,7 +6,7 @@ public extension View {
     }
 }
 
-private struct Border<Content: View>: View, Primitive, Modifier {
+private struct Border<Content: View>: View, PrimitiveView, Modifier {
     let content: Content
     let color: Color?
     @Environment(\.foregroundColor) var foregroundColor: Color

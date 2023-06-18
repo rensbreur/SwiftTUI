@@ -1,6 +1,6 @@
 import Foundation
 
-public struct TupleView2<C0: View, C1: View>: View, Primitive {
+public struct TupleView2<C0: View, C1: View>: View, PrimitiveView {
     public let content: (C0, C1)
 
     static var size: Int? {
@@ -25,7 +25,7 @@ public struct TupleView2<C0: View, C1: View>: View, Primitive {
 
 }
 
-public struct TupleView3<C0: View, C1: View, C2: View>: View, Primitive {
+public struct TupleView3<C0: View, C1: View, C2: View>: View, PrimitiveView {
     public let content: (C0, C1, C2)
 
     static var size: Int? {
@@ -53,7 +53,7 @@ public struct TupleView3<C0: View, C1: View, C2: View>: View, Primitive {
 
 }
 
-public struct TupleView4<C0: View, C1: View, C2: View, C3: View>: View, Primitive {
+public struct TupleView4<C0: View, C1: View, C2: View, C3: View>: View, PrimitiveView {
     public let content: (C0, C1, C2, C3)
 
     static var size: Int? {
@@ -84,7 +84,7 @@ public struct TupleView4<C0: View, C1: View, C2: View, C3: View>: View, Primitiv
 
 }
 
-public struct TupleView5<C0: View, C1: View, C2: View, C3: View, C4: View>: View, Primitive {
+public struct TupleView5<C0: View, C1: View, C2: View, C3: View, C4: View>: View, PrimitiveView {
     public let content: (C0, C1, C2, C3, C4)
 
     static var size: Int? {
@@ -118,7 +118,7 @@ public struct TupleView5<C0: View, C1: View, C2: View, C3: View, C4: View>: View
 
 }
 
-public struct TupleView6<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View>: View, Primitive {
+public struct TupleView6<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View>: View, PrimitiveView {
     public let content: (C0, C1, C2, C3, C4, C5)
 
     static var size: Int? {
@@ -155,7 +155,7 @@ public struct TupleView6<C0: View, C1: View, C2: View, C3: View, C4: View, C5: V
 
 }
 
-public struct TupleView7<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View>: View, Primitive {
+public struct TupleView7<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View>: View, PrimitiveView {
     public let content: (C0, C1, C2, C3, C4, C5, C6)
 
     static var size: Int? {
@@ -195,7 +195,7 @@ public struct TupleView7<C0: View, C1: View, C2: View, C3: View, C4: View, C5: V
 
 }
 
-public struct TupleView8<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View>: View, Primitive {
+public struct TupleView8<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View>: View, PrimitiveView {
     public let content: (C0, C1, C2, C3, C4, C5, C6, C7)
 
     static var size: Int? {
@@ -238,7 +238,7 @@ public struct TupleView8<C0: View, C1: View, C2: View, C3: View, C4: View, C5: V
 
 }
 
-public struct TupleView9<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View, C8: View>: View, Primitive {
+public struct TupleView9<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View, C8: View>: View, PrimitiveView {
     public let content: (C0, C1, C2, C3, C4, C5, C6, C7, C8)
 
     static var size: Int? {
@@ -284,7 +284,7 @@ public struct TupleView9<C0: View, C1: View, C2: View, C3: View, C4: View, C5: V
 
 }
 
-public struct TupleView10<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View, C8: View, C9: View>: View, Primitive {
+public struct TupleView10<C0: View, C1: View, C2: View, C3: View, C4: View, C5: View, C6: View, C7: View, C8: View, C9: View>: View, PrimitiveView {
     public let content: (C0, C1, C2, C3, C4, C5, C6, C7, C8, C9)
 
     static var size: Int? {

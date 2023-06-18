@@ -1,6 +1,6 @@
 import Foundation
 
-public struct TextField: View, Primitive {
+public struct TextField: View, PrimitiveView {
     public let action: (String) -> Void
 
     public init(action: @escaping (String) -> Void) {

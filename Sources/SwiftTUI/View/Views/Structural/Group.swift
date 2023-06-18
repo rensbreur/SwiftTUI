@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Group<Content: View>: View, Primitive {
+public struct Group<Content: View>: View, PrimitiveView {
     public let content: Content
 
     public init(@ViewBuilder _ content: () -> Content) {

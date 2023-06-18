@@ -6,7 +6,7 @@ public extension View {
     }
 }
 
-private struct FixedFrame<Content: View>: View, Primitive, Modifier {
+private struct FixedFrame<Content: View>: View, PrimitiveView, Modifier {
     let content: Content
     let width: Int?
     let height: Int?

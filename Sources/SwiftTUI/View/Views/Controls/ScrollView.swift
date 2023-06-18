@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ScrollView<Content: View>: View, Primitive {
+public struct ScrollView<Content: View>: View, PrimitiveView {
     let content: VStack<Content>
 
     public init(@ViewBuilder _ content: () -> Content) {

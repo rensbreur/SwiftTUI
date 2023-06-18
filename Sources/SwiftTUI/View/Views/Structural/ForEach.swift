@@ -1,6 +1,6 @@
 import Foundation
 
-public struct ForEach<Data, ID, Content>: View, Primitive where Data : RandomAccessCollection, ID : Hashable, Content : View {
+public struct ForEach<Data, ID, Content>: View, PrimitiveView where Data : RandomAccessCollection, ID : Hashable, Content : View {
     public var data: Data
     public var content: (Data.Element) -> Content
     private var id: KeyPath<Data.Element, ID>

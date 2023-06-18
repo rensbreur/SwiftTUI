@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Button: View, Primitive {
+public struct Button: View, PrimitiveView {
     public let n: String
     public let action: () -> Void
 

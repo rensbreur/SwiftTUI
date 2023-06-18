@@ -1,6 +1,6 @@
 import Foundation
 
-extension Color: View, Primitive {
+extension Color: View, PrimitiveView {
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {

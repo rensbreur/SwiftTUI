@@ -1,6 +1,6 @@
 import Foundation
 
-public struct Text: View, Primitive {
+public struct Text: View, PrimitiveView {
     private var text: String?
 
     private var _attributedText: Any?

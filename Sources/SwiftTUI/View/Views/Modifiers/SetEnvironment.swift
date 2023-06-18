@@ -6,7 +6,7 @@ public extension View {
     }
 }
 
-private struct SetEnvironment<Content: View, T>: View, Primitive {
+private struct SetEnvironment<Content: View, T>: View, PrimitiveView {
     let content: Content
     let keyPath: WritableKeyPath<EnvironmentValues, T>
     let value: T
