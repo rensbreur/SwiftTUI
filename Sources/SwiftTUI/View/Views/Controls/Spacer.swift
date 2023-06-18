@@ -14,7 +14,7 @@ public struct Spacer: View, Primitive {
 
     func updateNode(_ node: Node) {
         setupEnvironmentProperties(node: node)
-        node.nodeBuilder = self
+        node.view = self
         let control = node.control as! SpacerControl
         control.orientation = stackOrientation
     }

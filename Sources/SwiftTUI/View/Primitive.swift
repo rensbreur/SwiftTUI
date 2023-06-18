@@ -18,7 +18,7 @@ import Foundation
 /// underlying view. They can lazily load the controls.
 ///
 /// Note that a view is a description of how to create a **list** of controls.
-protocol Primitive: NodeBuilder {}
+protocol Primitive: GenericView {}
 
 extension Primitive {
     public var body: Never { fatalError("Cannot evaluate body of primitive view") }
@@ -34,7 +34,7 @@ extension View {
 }
 
 extension View {
-    var nodeBuilder: NodeBuilder {
+    var view: GenericView {
         if let primitiveView = self as? Primitive {
             return primitiveView
         }

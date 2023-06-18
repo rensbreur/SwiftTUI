@@ -1,6 +1,6 @@
 import Foundation
 
-extension Optional: View, Primitive, NodeBuilder, OptionalView where Wrapped: View {
+extension Optional: View, Primitive, GenericView, OptionalView where Wrapped: View {
     public typealias Body = Never
 
     static var size: Int? {
@@ -10,22 +10,22 @@ extension Optional: View, Primitive, NodeBuilder, OptionalView where Wrapped: Vi
 
     func buildNode(_ node: Node) {
         if let view = self {
-            node.addNode(at: 0, Node(nodeBuilder: view.nodeBuilder))
+            node.addNode(at: 0, Node(view: view.view))
         }
     }
 
     func updateNode(_ node: Node) {
-        let last = node.nodeBuilder as! Self
-        node.nodeBuilder = self
+        let last = node.view as! Self
+        node.view = self
         switch (last, self) {
         case (.none, .none):
             break
         case (.none, .some(let newValue)):
-            node.addNode(at: 0, Node(nodeBuilder: newValue.nodeBuilder))
+            node.addNode(at: 0, Node(view: newValue.view))
         case (.some, .none):
             node.removeNode(at: 0)
         case (.some, .some(let newValue)):
-            node.children[0].update(using: newValue.nodeBuilder)
+            node.children[0].update(using: newValue.view)
         }
     }
 }

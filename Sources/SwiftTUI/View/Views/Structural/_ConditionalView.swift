@@ -16,26 +16,26 @@ public struct _ConditionalView<TrueContent: View, FalseContent: View>: View, Pri
     func buildNode(_ node: Node) {
         switch content {
         case .a(let value):
-            node.addNode(at: 0, Node(nodeBuilder: value.nodeBuilder))
+            node.addNode(at: 0, Node(view: value.view))
         case .b(let value):
-            node.addNode(at: 0, Node(nodeBuilder: value.nodeBuilder))
+            node.addNode(at: 0, Node(view: value.view))
         }
     }
 
     func updateNode(_ node: Node) {
-        let last = node.nodeBuilder as! Self
-        node.nodeBuilder = self
+        let last = node.view as! Self
+        node.view = self
         switch (last.content, self.content) {
         case (.a, .a(let newValue)):
-            node.children[0].update(using: newValue.nodeBuilder)
+            node.children[0].update(using: newValue.view)
         case (.b, .b(let newValue)):
-            node.children[0].update(using: newValue.nodeBuilder)
+            node.children[0].update(using: newValue.view)
         case (.b, .a(let newValue)):
             node.removeNode(at: 0)
-            node.addNode(at: 0, Node(nodeBuilder: newValue.nodeBuilder))
+            node.addNode(at: 0, Node(view: newValue.view))
         case (.a, .b(let newValue)):
             node.removeNode(at: 0)
-            node.addNode(at: 0, Node(nodeBuilder: newValue.nodeBuilder))
+            node.addNode(at: 0, Node(view: newValue.view))
         }
     }
 }

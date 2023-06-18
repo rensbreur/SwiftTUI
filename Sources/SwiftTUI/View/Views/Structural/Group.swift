@@ -10,12 +10,12 @@ public struct Group<Content: View>: View, Primitive {
     static var size: Int? { Content.size }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
+        node.addNode(at: 0, Node(view: content.view))
     }
 
     func updateNode(_ node: Node) {
-        node.nodeBuilder = self
-        node.children[0].update(using: content.nodeBuilder)
+        node.view = self
+        node.children[0].update(using: content.view)
     }
 
 }

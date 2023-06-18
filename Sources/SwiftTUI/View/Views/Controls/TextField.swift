@@ -14,7 +14,7 @@ public struct TextField: View, Primitive {
     }
 
     func updateNode(_ node: Node) {
-        node.nodeBuilder = self
+        node.view = self
         (node.control as! TextFieldControl).action = action
     }
 }

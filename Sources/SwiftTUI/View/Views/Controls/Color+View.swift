@@ -8,8 +8,8 @@ extension Color: View, Primitive {
     }
 
     func updateNode(_ node: Node) {
-        let last = node.nodeBuilder as! Self
-        node.nodeBuilder = self
+        let last = node.view as! Self
+        node.view = self
         if self != last {
             let control = node.control as! ColorControl
             control.color = self

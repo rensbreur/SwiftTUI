@@ -12,7 +12,7 @@ import Foundation
 /// Note that the control tree more closely resembles the layout hierarchy,
 /// because structural views (ForEach, etc.) have their own node.
 final class Node {
-    var nodeBuilder: NodeBuilder
+    var view: GenericView
 
     var state: [String: Any] = [:]
     var environment: ((inout EnvironmentValues) -> Void)?
@@ -27,13 +27,13 @@ final class Node {
 
     private(set) var built = false
 
-    init(nodeBuilder: NodeBuilder) {
-        self.nodeBuilder = nodeBuilder
+    init(view: GenericView) {
+        self.view = view
     }
 
-    func update(using nodeBuilder: NodeBuilder) {
+    func update(using view: GenericView) {
         build()
-        nodeBuilder.updateNode(self)
+        view.updateNode(self)
     }
 
     var root: Node { parent?.root ?? self }
@@ -41,7 +41,7 @@ final class Node {
     /// The total number of controls in the node.
     /// The node does not need to be fully built for the size to be computed.
     var size: Int {
-        if let size = type(of: nodeBuilder).size { return size }
+        if let size = type(of: view).size { return size }
         build()
         return children.map(\.size).reduce(0, +)
     }
@@ -57,9 +57,9 @@ final class Node {
 
     func build() {
         if !built {
-            self.nodeBuilder.buildNode(self)
+            self.view.buildNode(self)
             built = true
-            if !(nodeBuilder is OptionalView), let container = nodeBuilder as? LayoutRoot {
+            if !(view is OptionalView), let container = view as? LayoutRoot {
                 container.loadData(node: self)
             }
         }
@@ -104,7 +104,7 @@ final class Node {
             let size = child.size
             if (offset - i) < size {
                 let control = child.control(at: offset - i)
-                if !(nodeBuilder is OptionalView), let modifier = self.nodeBuilder as? Modifier {
+                if !(view is OptionalView), let modifier = self.view as? Modifier {
                     return modifier.passControl(control)
                 }
                 return control
@@ -117,7 +117,7 @@ final class Node {
     // MARK: - Container changes
 
     private func insertControl(at offset: Int) {
-        if !(nodeBuilder is OptionalView), let container = nodeBuilder as? LayoutRoot {
+        if !(view is OptionalView), let container = view as? LayoutRoot {
             container.insertControl(at: offset, node: self)
             return
         }
@@ -125,7 +125,7 @@ final class Node {
     }
 
     private func removeControl(at offset: Int) {
-        if !(nodeBuilder is OptionalView), let container = nodeBuilder as? LayoutRoot {
+        if !(view is OptionalView), let container = view as? LayoutRoot {
             container.removeControl(at: offset, node: self)
             return
         }

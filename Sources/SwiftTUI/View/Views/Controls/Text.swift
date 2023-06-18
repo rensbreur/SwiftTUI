@@ -40,7 +40,7 @@ public struct Text: View, Primitive {
 
     func updateNode(_ node: Node) {
         setupEnvironmentProperties(node: node)
-        node.nodeBuilder = self
+        node.view = self
         let control = node.control as! TextControl
         control.text = text
         control._attributedText = _attributedText

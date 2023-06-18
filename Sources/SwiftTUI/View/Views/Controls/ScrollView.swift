@@ -10,7 +10,7 @@ public struct ScrollView<Content: View>: View, Primitive {
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
+        node.addNode(at: 0, Node(view: content.view))
         let control = ScrollControl()
         control.contentControl = node.children[0].control(at: 0)
         control.addSubview(control.contentControl, at: 0)
@@ -18,8 +18,8 @@ public struct ScrollView<Content: View>: View, Primitive {
     }
 
     func updateNode(_ node: Node) {
-        node.nodeBuilder = self
-        node.children[0].update(using: content.nodeBuilder)
+        node.view = self
+        node.children[0].update(using: content.view)
     }
 }
 

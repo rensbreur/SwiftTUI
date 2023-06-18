@@ -23,13 +23,13 @@ public struct ZStack<Content: View>: View, Primitive, LayoutRoot {
     }
 
     func buildNode(_ node: Node) {
-        node.addNode(at: 0, Node(nodeBuilder: content.nodeBuilder))
+        node.addNode(at: 0, Node(view: content.view))
         node.control = ZStackControl(alignment: alignment)
     }
 
     func updateNode(_ node: Node) {
-        node.nodeBuilder = self
-        node.children[0].update(using: content.nodeBuilder)
+        node.view = self
+        node.children[0].update(using: content.view)
         let control = node.control as! ZStackControl
         control.alignment = alignment
     }

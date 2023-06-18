@@ -13,7 +13,7 @@ extension Node {
 
     private func logTree(level: Int) {
         let indent = Array(repeating: " ", count: level * 2).joined()
-        log("\(indent)→ \(type(of: self.nodeBuilder))")
+        log("\(indent)→ \(type(of: self.view))")
         for child in children {
             child.logTree(level: level + 1)
         }

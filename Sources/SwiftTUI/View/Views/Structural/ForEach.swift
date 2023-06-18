@@ -23,13 +23,13 @@ public struct ForEach<Data, ID, Content>: View, Primitive where Data : RandomAcc
     func buildNode(_ node: Node) {
         let views: [Content] = data.map(content)
         for (i, view) in views.enumerated() {
-            node.addNode(at: i, Node(nodeBuilder: view.nodeBuilder))
+            node.addNode(at: i, Node(view: view.view))
         }
     }
 
     func updateNode(_ node: Node) {
-        let last = node.nodeBuilder as! Self
-        node.nodeBuilder = self
+        let last = node.view as! Self
+        node.view = self
         let diff = data.difference(from: last.data, by: { $0[keyPath: id] == $1[keyPath: last.id] })
         var needsUpdate = Set<Int>(0 ..< data.count)
         for change in diff {
@@ -37,12 +37,12 @@ public struct ForEach<Data, ID, Content>: View, Primitive where Data : RandomAcc
             case .remove(let offset, _, _):
                 node.removeNode(at: offset)
             case .insert(let offset, let element, _):
-                node.addNode(at: offset, Node(nodeBuilder: content(element).nodeBuilder))
+                node.addNode(at: offset, Node(view: content(element).view))
                 needsUpdate.remove(offset)
             }
         }
         for i in needsUpdate {
-            node.children[i].update(using: content(data[data.index(data.startIndex, offsetBy:i)]).nodeBuilder)
+            node.children[i].update(using: content(data[data.index(data.startIndex, offsetBy:i)]).view)
         }
     }
 }
