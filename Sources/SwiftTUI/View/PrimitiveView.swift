@@ -36,6 +36,6 @@ extension View {
         if let primitiveView = self as? PrimitiveView {
             return primitiveView
         }
-        return Composed(view: self)
+        return ComposedView(view: self)
     }
 }

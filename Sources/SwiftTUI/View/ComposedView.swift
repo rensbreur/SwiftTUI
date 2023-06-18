@@ -1,7 +1,7 @@
 import Foundation
 
-/// This wraps a composed view, so that it can be used as a node builder.
-struct Composed<I: View>: GenericView {
+/// This wraps a composed (user-defined) view, so that it can be used in a view graph node.
+struct ComposedView<I: View>: GenericView {
     let view: I
 
     func buildNode(_ node: Node) {
