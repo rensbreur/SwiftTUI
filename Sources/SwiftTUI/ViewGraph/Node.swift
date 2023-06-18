@@ -104,7 +104,7 @@ final class Node {
             let size = child.size
             if (offset - i) < size {
                 let control = child.control(at: offset - i)
-                if !(view is OptionalView), let modifier = self.view as? Modifier {
+                if !(view is OptionalView), let modifier = self.view as? ModifierView {
                     return modifier.passControl(control)
                 }
                 return control

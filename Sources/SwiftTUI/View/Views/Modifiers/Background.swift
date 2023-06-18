@@ -6,7 +6,7 @@ public extension View {
     }
 }
 
-private struct Background<Content: View>: View, PrimitiveView, Modifier {
+private struct Background<Content: View>: View, PrimitiveView, ModifierView {
     let content: Content
     let color: Color
 

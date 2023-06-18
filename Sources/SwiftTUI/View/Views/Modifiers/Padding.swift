@@ -6,7 +6,7 @@ public extension View {
     }
 }
 
-private struct Padding<Content: View>: View, PrimitiveView, Modifier {
+private struct Padding<Content: View>: View, PrimitiveView, ModifierView {
     let content: Content
 
     init(content: Content) {
