@@ -5,9 +5,21 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
-            Button("Add number") { counter += 1 }
+            Button {
+                counter += 1
+            } label: {
+                Text("Add number")
+                    .foregroundColor(.green)
+                    .bold()
+            }
             if counter > 1 {
-                Button("Remove number") { counter -= 1 }
+                Button {
+                    counter -= 1
+                } label: {
+                    Text("Remove number")
+                        .foregroundColor(.red)
+                        .bold()
+                }
             }
             ForEach(1 ... counter, id: \.self) { i in
                 Text("Number \(i)")
