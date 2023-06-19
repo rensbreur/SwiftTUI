@@ -50,7 +50,7 @@ public struct Button: View, PrimitiveView {
             guard position.column < text.count else { return .init(char: " ") }
             return Cell(
                 char: text[text.index(text.startIndex, offsetBy: position.column)],
-                attributes: CellAttributes(inverted: isFirstResponder)
+                highlighted: isFirstResponder
             )
         }
 

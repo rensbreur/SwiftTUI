@@ -60,6 +60,9 @@ class Layer {
                 if char == nil {
                     char = cell
                 }
+                if let highlighted = cell.highlighted {
+                    char?.highlighted = highlighted
+                }
                 if let color = cell.backgroundColor {
                     char?.backgroundColor = color
                     break
@@ -67,16 +70,26 @@ class Layer {
             }
         }
 
-        // Draw layer content as background
         if let cell = content?.cell(at: position) {
             if char == nil {
                 char = cell
             }
+            if let highlighted = cell.highlighted {
+                char?.highlighted = highlighted
+            }
+            // Draw layer content as background
             if char?.backgroundColor == nil, let backgroundColor = cell.backgroundColor {
                 char?.backgroundColor = backgroundColor
             }
         }
 
+        if let highlighted = char?.highlighted {
+            var attributes = char?.attributes ?? CellAttributes()
+            attributes.inverted = attributes.inverted != highlighted // exclusive or
+            char?.attributes = attributes
+            char?.highlighted = nil
+        }
+        
         return char
     }
 
