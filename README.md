@@ -37,7 +37,9 @@ struct MyTerminalView: View {
 Application(rootView: MyTerminalView()).start()
 ```
 
-### Showcase
+### Examples
+
+These example projects are included in the repository.
 
 #### ToDoList ([Examples/ToDoList](Examples/ToDoList))
 
@@ -51,8 +53,22 @@ This is a very simple to-do list application. Use the arrow keys to move around.
 
 This is a flag editor, which you will agree to if you come from a country which has a simple flag consisting of colors stacked horizontally or vertically. Select one of the colors of the flag to change it. Use the options on the right to change the number of colors or the flag orientation.
 
+### Showcase
+
+Are you working on a project that's using SwiftTUI? Get in touch with me if you'd like to have it featured here.
+
+#### soundcld
+
+![](showcase_screenshot.png)
+
+This is a TUI application for SoundCloud. It's not (yet) available publicly.
+
 ### More
 
 See a screen recording of SwiftTUI [in action](https://www.reddit.com/r/SwiftUI/comments/wlabyn/im_making_a_version_of_swiftui_for_terminal/) on Reddit.
 
 Learn how [the diffing works](https://rensbr.eu/blog/swiftui-diffing/) on my blog.
+
+### Contributing
+
+This is an open-source project, contributions are welcome! The goal of SwiftTUI is to resemble SwiftUI when it comes to both API and   inner workings, unless those don't make sense for terminal applications. Features that SwiftUI lacks but that would be useful for terminal applications might better live in a seperate project.
