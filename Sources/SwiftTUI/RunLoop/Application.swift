@@ -147,7 +147,17 @@ public class Application {
 
     private func stop() {
         renderer.stop()
+        resetInputMode() // Fix for: https://github.com/rensbreur/SwiftTUI/issues/25
         exit(0)
+    }
+
+    /// Fix for: https://github.com/rensbreur/SwiftTUI/issues/25
+    private func resetInputMode() {
+        // Reset ECHO and ICANON values:
+        var tattr = termios()
+        tcgetattr(STDIN_FILENO, &tattr)
+        tattr.c_lflag |= tcflag_t(ECHO | ICANON)
+        tcsetattr(STDIN_FILENO, TCSAFLUSH, &tattr);
     }
 
 }
