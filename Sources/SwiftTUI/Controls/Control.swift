@@ -21,6 +21,12 @@ class Control: LayerDrawing {
         for i in index ..< children.count {
             children[i].index = i
         }
+        if root.window?.firstResponder == nil {
+            if let responder = view.firstSelectableElement {
+                root.window?.firstResponder = responder
+                responder.becomeFirstResponder()
+            }
+        }
     }
 
     func removeSubview(at index: Int) {

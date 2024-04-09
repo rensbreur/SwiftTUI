@@ -1,34 +1,44 @@
 import Foundation
 
 public struct TextField: View, PrimitiveView {
+    public let placeholder: String?
     public let action: (String) -> Void
 
-    public init(action: @escaping (String) -> Void) {
+    @Environment(\.placeholderColor) private var placeholderColor: Color
+
+    public init(placeholder: String? = nil, action: @escaping (String) -> Void) {
+        self.placeholder = placeholder
         self.action = action
     }
 
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
-        node.control = TextFieldControl(action: action)
+        setupEnvironmentProperties(node: node)
+        node.control = TextFieldControl(placeholder: placeholder ?? "", placeholderColor: placeholderColor, action: action)
     }
 
     func updateNode(_ node: Node) {
+        setupEnvironmentProperties(node: node)
         node.view = self
         (node.control as! TextFieldControl).action = action
     }
 
     private class TextFieldControl: Control {
-        var text: String = ""
-
+        var placeholder: String
+        var placeholderColor: Color
         var action: (String) -> Void
 
-        init(action: @escaping (String) -> Void) {
+        var text: String = ""
+
+        init(placeholder: String, placeholderColor: Color, action: @escaping (String) -> Void) {
+            self.placeholder = placeholder
+            self.placeholderColor = placeholderColor
             self.action = action
         }
 
         override func size(proposedSize: Size) -> Size {
-            return Size(width: Extended(text.count) + 1, height: 1)
+            return Size(width: Extended(max(text.count, placeholder.count)) + 1, height: 1)
         }
 
         override func handleEvent(_ char: Character) {
@@ -53,8 +63,20 @@ public struct TextField: View, PrimitiveView {
 
         override func cell(at position: Position) -> Cell? {
             guard position.line == 0 else { return nil }
-            if position.column == Extended(text.count), isFirstResponder { return Cell(char: "_") }
-            guard position.column < Extended(text.count) else { return .init(char: " ") }
+            if text.isEmpty {
+                if position.column.intValue < placeholder.count {
+                    let showUnderline = (position.column.intValue == 0) && isFirstResponder
+                    let char = placeholder[placeholder.index(placeholder.startIndex, offsetBy: position.column.intValue)]
+                    return Cell(
+                        char: char,
+                        foregroundColor: placeholderColor,
+                        attributes: CellAttributes(underline: showUnderline)
+                    )
+                }
+                return .init(char: " ")
+            }
+            if position.column.intValue == text.count, isFirstResponder { return Cell(char: " ", attributes: CellAttributes(underline: true)) }
+            guard position.column.intValue < text.count else { return .init(char: " ") }
             return Cell(char: text[text.index(text.startIndex, offsetBy: position.column.intValue)])
         }
 
@@ -70,4 +92,15 @@ public struct TextField: View, PrimitiveView {
             layer.invalidate()
         }
     }
+}
+
+extension EnvironmentValues {
+    public var placeholderColor: Color {
+        get { self[PlaceholderColorEnvironmentKey.self] }
+        set { self[PlaceholderColorEnvironmentKey.self] = newValue }
+    }
+}
+
+private struct PlaceholderColorEnvironmentKey: EnvironmentKey {
+    static var defaultValue: Color { .default }
 }
