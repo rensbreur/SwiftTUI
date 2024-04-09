@@ -72,12 +72,12 @@ class Renderer {
                 self.currentPosition = position
             }
             if self.currentForegroundColor != cell.foregroundColor {
-                write(EscapeSequence.setForegroundColor(cell.foregroundColor))
+                write(cell.foregroundColor.foregroundEscapeSequence)
                 self.currentForegroundColor = cell.foregroundColor
             }
             let backgroundColor = cell.backgroundColor ?? .default
             if self.currentBackgroundColor != backgroundColor {
-                write(EscapeSequence.setBackgroundColor(backgroundColor))
+                write(backgroundColor.backgroundEscapeSequence)
                 self.currentBackgroundColor = backgroundColor
             }
             self.updateAttributes(cell.attributes)

@@ -9,10 +9,25 @@ enum EscapeSequence {
     static let showCursor = "\u{1b}[?25h"
     static let hideCursor = "\u{1b}[?25l"
 
-    static func moveTo(_ position: Position) -> String { "\u{1b}[\(position.line + 1);\(position.column + 1)H" }
+    static func moveTo(_ position: Position) -> String {
+        "\u{1b}[\(position.line + 1);\(position.column + 1)H"
+    }
 
-    static func setForegroundColor(_ color: Color) -> String { "\u{1b}[\(color.foregroundCode)m" }
-    static func setBackgroundColor(_ color: Color) -> String { "\u{1b}[\(color.backgroundCode)m" }
+    static func setForegroundColor(_ color: ANSIColor) -> String {
+        "\u{1b}[\(color.foregroundCode)m"
+    }
+
+    static func setBackgroundColor(_ color: ANSIColor) -> String {
+        "\u{1b}[\(color.backgroundCode)m"
+    }
+
+    static func setForegroundColor(red: Int, green: Int, blue: Int) -> String {
+        "\u{1b}[38;2;\(red);\(green);\(blue)m"
+    }
+
+    static func setBackgroundColor(red: Int, green: Int, blue: Int) -> String {
+        "\u{1b}[48;2;\(red);\(green);\(blue)m"
+    }
 
     static let enableBold = "\u{1b}[1m"
     static let disableBold = "\u{1b}[22m"
