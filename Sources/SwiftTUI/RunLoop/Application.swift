@@ -1,4 +1,5 @@
 import Foundation
+import AppKit
 
 public class Application {
     private let node: Node
@@ -6,12 +7,16 @@ public class Application {
     private let control: Control
     private let renderer: Renderer
 
+    private let runLoopType: RunLoopType
+
     private var arrowKeyParser = ArrowKeyParser()
 
     private var invalidatedNodes: [Node] = []
     private var updateScheduled = false
 
-    public init<I: View>(rootView: I) {
+    public init<I: View>(rootView: I, runLoopType: RunLoopType = .dispatch) {
+        self.runLoopType = runLoopType
+
         node = Node(view: VStack(content: rootView).view)
         node.build()
 
@@ -30,6 +35,17 @@ public class Application {
         renderer.application = self
     }
 
+    var stdInSource: DispatchSourceRead?
+
+    public enum RunLoopType {
+        /// Use Dispatch for the main run loop.
+        case dispatch
+
+        /// This creates and runs an NSApplication so that you can open NSWindows running
+        /// simultaneously to the terminal app. This requires macOS and AppKit.
+        case cocoa
+    }
+
     public func start() {
         setInputMode()
         updateWindowSize()
@@ -39,6 +55,7 @@ public class Application {
         let stdInSource = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .main)
         stdInSource.setEventHandler(qos: .default, flags: [], handler: self.handleInput)
         stdInSource.resume()
+        self.stdInSource = stdInSource
 
         let sigWinChSource = DispatchSource.makeSignalSource(signal: SIGWINCH, queue: .main)
         sigWinChSource.setEventHandler(qos: .default, flags: [], handler: self.handleWindowSizeChange)
@@ -49,8 +66,13 @@ public class Application {
         sigIntSource.setEventHandler(qos: .default, flags: [], handler: self.stop)
         sigIntSource.resume()
 
-        dispatchMain()
-
+        switch runLoopType {
+        case .dispatch:
+            dispatchMain()
+        case .cocoa:
+            NSApplication.shared.setActivationPolicy(.accessory)
+            NSApplication.shared.run()
+        }
     }
 
     private func setInputMode() {
@@ -161,4 +183,3 @@ public class Application {
     }
 
 }
-
