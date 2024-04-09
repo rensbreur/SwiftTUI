@@ -1,10 +1,10 @@
 import Foundation
 
-struct Size: Equatable, CustomStringConvertible {
-    var width: Int
-    var height: Int
+public struct Size: Equatable, CustomStringConvertible {
+    public var width: Int
+    public var height: Int
 
-    static var zero: Size { Size(width: 0, height: 0) }
+    public static var zero: Size { Size(width: 0, height: 0) }
 
-    var description: String { "\(width)x\(height)" }
+    public var description: String { "\(width)x\(height)" }
 }
