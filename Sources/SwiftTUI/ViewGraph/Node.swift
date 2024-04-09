@@ -26,6 +26,9 @@ final class Node {
     var control: Control?
     weak var application: Application?
 
+    /// For modifiers only, references to the controls
+    var controls: WeakSet<Control>?
+
     private(set) var parent: Node?
     private(set) var children: [Node] = []
 
@@ -111,7 +114,7 @@ final class Node {
             if (offset - i) < size {
                 let control = child.control(at: offset - i)
                 if !(view is OptionalView), let modifier = self.view as? ModifierView {
-                    return modifier.passControl(control)
+                    return modifier.passControl(control, node: self)
                 }
                 return control
             }
