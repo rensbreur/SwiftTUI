@@ -1,18 +1,18 @@
 import Foundation
 
 public extension View {
-    func frame(width: Int? = nil, height: Int? = nil, alignment: Alignment = .topLeading) -> some View {
+    func frame(width: Extended? = nil, height: Extended? = nil, alignment: Alignment = .topLeading) -> some View {
         FixedFrame(content: self, width: width, height: height, alignment: alignment)
     }
 }
 
 private struct FixedFrame<Content: View>: View, PrimitiveView, ModifierView {
     let content: Content
-    let width: Int?
-    let height: Int?
+    let width: Extended?
+    let height: Extended?
     let alignment: Alignment
 
-    init(content: Content, width: Int?, height: Int?, alignment: Alignment) {
+    init(content: Content, width: Extended?, height: Extended?, alignment: Alignment) {
         self.content = content
         self.width = width
         self.height = height
@@ -38,11 +38,11 @@ private struct FixedFrame<Content: View>: View, PrimitiveView, ModifierView {
     }
 
     private class FixedFrameControl: Control {
-        var width: Int?
-        var height: Int?
+        var width: Extended?
+        var height: Extended?
         var alignment: Alignment
 
-        init(width: Int?, height: Int?, alignment: Alignment) {
+        init(width: Extended?, height: Extended?, alignment: Alignment) {
             self.width = width
             self.height = height
             self.alignment = alignment

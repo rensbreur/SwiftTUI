@@ -1,8 +1,8 @@
 import Foundation
 
 struct Position: Equatable {
-    var column: Int
-    var line: Int
+    var column: Extended
+    var line: Extended
 
     static var zero: Position { Position(column: 0, line: 0) }
 }

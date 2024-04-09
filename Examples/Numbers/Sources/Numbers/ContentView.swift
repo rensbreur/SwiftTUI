@@ -5,6 +5,23 @@ struct ContentView: View {
 
     var body: some View {
         VStack {
+            HStack(spacing: 0) {
+                Color.blue
+                    .frame(width: 5, height: 2)
+                    .border()
+                Color.blue
+                    .frame(width: 5, height: 2)
+                    .border()
+            }
+            HStack(spacing: 0) {
+                Color.blue
+                    .frame(width: 5, height: 2)
+                    .border()
+                Color.blue
+                    .frame(width: 5, height: 2)
+                    .border()
+                    .padding(.left, -1)
+            }
             Button("Add number") { counter += 1 }
             if counter > 1 {
                 Button("Remove number") { counter -= 1 }

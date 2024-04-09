@@ -59,15 +59,15 @@ class Control: LayerDrawing {
         layer.frame.size = size
     }
 
-    func horizontalFlexibility(height: Int) -> Int {
+    func horizontalFlexibility(height: Extended) -> Extended {
         let minSize = size(proposedSize: Size(width: 0, height: height))
-        let maxSize = size(proposedSize: Size(width: .max, height: height))
+        let maxSize = size(proposedSize: Size(width: .infinity, height: height))
         return maxSize.width - minSize.width
     }
 
-    func verticalFlexibility(width: Int) -> Int {
+    func verticalFlexibility(width: Extended) -> Extended {
         let minSize = size(proposedSize: Size(width: width, height: 0))
-        let maxSize = size(proposedSize: Size(width: width, height: .max))
+        let maxSize = size(proposedSize: Size(width: width, height: .infinity))
         return maxSize.height - minSize.height
     }
 

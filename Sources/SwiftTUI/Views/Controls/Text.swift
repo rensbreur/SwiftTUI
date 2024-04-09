@@ -85,15 +85,15 @@ public struct Text: View, PrimitiveView {
         }
         
         override func size(proposedSize: Size) -> Size {
-            return Size(width: characterCount, height: 1)
+            return Size(width: Extended(characterCount), height: 1)
         }
         
         override func cell(at position: Position) -> Cell? {
             guard position.line == 0 else { return nil }
-            guard position.column < characterCount else { return .init(char: " ") }
+            guard position.column < Extended(characterCount) else { return .init(char: " ") }
             if #available(macOS 12, *), let attributedText {
                 let characters = attributedText.characters
-                let i = characters.index(characters.startIndex, offsetBy: position.column)
+                let i = characters.index(characters.startIndex, offsetBy: position.column.intValue)
                 let char = attributedText[i ..< characters.index(after: i)]
                 let cellAttributes = CellAttributes(
                     bold: char.bold ?? bold,
@@ -117,7 +117,7 @@ public struct Text: View, PrimitiveView {
                     strikethrough: strikethrough
                 )
                 return Cell(
-                    char: text[text.index(text.startIndex, offsetBy: position.column)],
+                    char: text[text.index(text.startIndex, offsetBy: position.column.intValue)],
                     foregroundColor: foregroundColor,
                     attributes: cellAttributes
                 )

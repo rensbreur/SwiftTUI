@@ -163,7 +163,7 @@ public class Application {
             assertionFailure("Could not get window size")
             return
         }
-        window.layer.frame.size = Size(width: Int(size.ws_col), height: Int(size.ws_row))
+        window.layer.frame.size = Size(width: Extended(Int(size.ws_col)), height: Extended(Int(size.ws_row)))
         renderer.setCache()
     }
 

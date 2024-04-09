@@ -36,7 +36,7 @@ public struct Button: View, PrimitiveView {
         }
 
         override func size(proposedSize: Size) -> Size {
-            return Size(width: text.count, height: 1)
+            return Size(width: Extended(text.count), height: 1)
         }
 
         override func handleEvent(_ char: Character) {
@@ -47,9 +47,9 @@ public struct Button: View, PrimitiveView {
 
         override func cell(at position: Position) -> Cell? {
             guard position.line == 0 else { return nil }
-            guard position.column < text.count else { return .init(char: " ") }
+            guard position.column < Extended(text.count) else { return .init(char: " ") }
             return Cell(
-                char: text[text.index(text.startIndex, offsetBy: position.column)],
+                char: text[text.index(text.startIndex, offsetBy: position.column.intValue)],
                 attributes: CellAttributes(inverted: isFirstResponder)
             )
         }

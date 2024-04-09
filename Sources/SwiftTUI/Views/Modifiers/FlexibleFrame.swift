@@ -2,10 +2,10 @@ import Foundation
 
 public extension View {
     func frame(
-        minWidth: Int? = nil,
-        maxWidth: Int? = nil,
-        minHeight: Int? = nil,
-        maxHeight: Int? = nil,
+        minWidth: Extended? = nil,
+        maxWidth: Extended? = nil,
+        minHeight: Extended? = nil,
+        maxHeight: Extended? = nil,
         alignment: Alignment = .center
     ) -> some View {
         FlexibleFrame(content: self, minWidth: minWidth, maxWidth: maxWidth, minHeight: minHeight, maxHeight: maxHeight, alignment: alignment)
@@ -14,10 +14,10 @@ public extension View {
 
 private struct FlexibleFrame<Content: View>: View, PrimitiveView, ModifierView {
     let content: Content
-    let minWidth: Int?
-    let maxWidth: Int?
-    let minHeight: Int?
-    let maxHeight: Int?
+    let minWidth: Extended?
+    let maxWidth: Extended?
+    let minHeight: Extended?
+    let maxHeight: Extended?
     let alignment: Alignment
     
     static var size: Int? { Content.size }
@@ -39,13 +39,13 @@ private struct FlexibleFrame<Content: View>: View, PrimitiveView, ModifierView {
     }
     
     private class FlexibleFrameControl: Control {
-        var minWidth: Int?
-        var maxWidth: Int?
-        var minHeight: Int?
-        var maxHeight: Int?
+        var minWidth: Extended?
+        var maxWidth: Extended?
+        var minHeight: Extended?
+        var maxHeight: Extended?
         var alignment: Alignment
         
-        init(minWidth: Int?, maxWidth: Int?, minHeight: Int?, maxHeight: Int?, alignment: Alignment) {
+        init(minWidth: Extended?, maxWidth: Extended?, minHeight: Extended?, maxHeight: Extended?, alignment: Alignment) {
             self.minWidth = minWidth
             self.maxWidth = maxWidth
             self.minHeight = minHeight
@@ -55,8 +55,8 @@ private struct FlexibleFrame<Content: View>: View, PrimitiveView, ModifierView {
         
         override func size(proposedSize: Size) -> Size {
             var proposedSize = proposedSize
-            proposedSize.width = min(maxWidth ?? .max, max(minWidth ?? 0, proposedSize.width))
-            proposedSize.height = min(maxHeight ?? .max, max(minHeight ?? 0, proposedSize.height))
+            proposedSize.width = min(maxWidth ?? .infinity, max(minWidth ?? 0, proposedSize.width))
+            proposedSize.height = min(maxHeight ?? .infinity, max(minHeight ?? 0, proposedSize.height))
             let size = children[0].size(proposedSize: proposedSize)
             if minHeight == nil, maxHeight == nil {
                 proposedSize.height = size.height

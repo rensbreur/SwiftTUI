@@ -9,22 +9,22 @@ struct Rect: Equatable {
         self.size = size
     }
 
-    init(minColumn: Int, minLine: Int, maxColumn: Int, maxLine: Int) {
+    init(minColumn: Extended, minLine: Extended, maxColumn: Extended, maxLine: Extended) {
         self.position = Position(column: minColumn, line: minLine)
         self.size = Size(width: maxColumn - minColumn + 1, height: maxLine - minLine + 1)
     }
 
-    init(column: Int, line: Int, width: Int, height: Int) {
+    init(column: Extended, line: Extended, width: Extended, height: Extended) {
         self.position = Position(column: column, line: line)
         self.size = Size(width: width, height: height)
     }
 
     static var zero: Rect { Rect(position: .zero, size: .zero) }
 
-    var minLine: Int { position.line }
-    var minColumn: Int { position.column }
-    var maxLine: Int { position.line + size.height - 1 }
-    var maxColumn: Int { position.column + size.width - 1 }
+    var minLine: Extended { position.line }
+    var minColumn: Extended { position.column }
+    var maxLine: Extended { position.line + size.height - 1 }
+    var maxColumn: Extended { position.column + size.width - 1 }
 
     /// The smallest rectangle that contains the two source rectangles.
     func union(_ r2: Rect) -> Rect {

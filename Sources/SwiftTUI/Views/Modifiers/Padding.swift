@@ -1,18 +1,20 @@
 import Foundation
 
 public extension View {
-    func padding() -> some View {
-        return Padding(content: self)
+    func padding(_ edges: Edges = .all, _ length: Extended? = nil) -> some View {
+        return Padding(content: self, edges: edges, length: length)
+    }
+
+    func padding(_ length: Extended) -> some View {
+        return Padding(content: self, edges: .all, length: length)
     }
 }
 
 private struct Padding<Content: View>: View, PrimitiveView, ModifierView {
     let content: Content
-    
-    init(content: Content) {
-        self.content = content
-    }
-    
+    let edges: Edges
+    let length: Extended?
+
     static var size: Int? { Content.size }
     
     func buildNode(_ node: Node) {
@@ -26,29 +28,69 @@ private struct Padding<Content: View>: View, PrimitiveView, ModifierView {
     
     func passControl(_ control: Control) -> Control {
         if let paddingControl = control.parent { return paddingControl }
-        let paddingControl = PaddingControl()
+        let paddingControl = PaddingControl(edges: edges, length: length)
         paddingControl.addSubview(control, at: 0)
         return paddingControl
     }
     
     private class PaddingControl: Control {
+        let edges: Edges
+        let length: Extended?
+
+        let defaultLength: Extended = 1
+
+        init(edges: Edges, length: Extended?) {
+            self.edges = edges
+            self.length = length
+        }
+
         override func size(proposedSize: Size) -> Size {
             var proposedSize = proposedSize
-            proposedSize.width -= 2
-            proposedSize.height -= 2
+            proposedSize.width -= horizontalPadding
+            proposedSize.height -= verticalPadding
             var size = children[0].size(proposedSize: proposedSize)
-            size.width += 2
-            size.height += 2
+            size.width += horizontalPadding
+            size.height += verticalPadding
             return size
         }
         
         override func layout(size: Size) {
             var contentSize = size
-            contentSize.width -= 2
-            contentSize.height -= 2
+            contentSize.width -= horizontalPadding
+            contentSize.height -= verticalPadding
             children[0].layout(size: contentSize)
-            children[0].layer.frame.position = Position(column: 1, line: 1)
+            children[0].layer.frame.position = Position(column: leftPadding, line: topPadding)
             self.layer.frame.size = size
+        }
+
+        private var leftPadding: Extended {
+            edges.contains(.left) ? (length ?? defaultLength) : 0
+        }
+
+        private var topPadding: Extended {
+            edges.contains(.top) ? (length ?? defaultLength) : 0
+        }
+
+        private var horizontalPadding: Extended {
+            var horizontalPadding: Extended = 0
+            if edges.contains(.left) {
+                horizontalPadding += length ?? defaultLength
+            }
+            if edges.contains(.right) {
+                horizontalPadding += length ?? defaultLength
+            }
+            return horizontalPadding
+        }
+
+        private var verticalPadding: Extended {
+            var verticalPadding: Extended = 0
+            if edges.contains(.top) {
+                verticalPadding += length ?? defaultLength
+            }
+            if edges.contains(.bottom) {
+                verticalPadding += length ?? defaultLength
+            }
+            return verticalPadding
         }
     }
 }

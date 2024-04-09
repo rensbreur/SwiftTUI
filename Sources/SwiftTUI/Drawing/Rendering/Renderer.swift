@@ -35,7 +35,7 @@ class Renderer {
     }
 
     func setCache() {
-        cache = .init(repeating: .init(repeating: nil, count: layer.frame.size.width), count: layer.frame.size.height)
+        cache = .init(repeating: .init(repeating: nil, count: layer.frame.size.width.intValue), count: layer.frame.size.height.intValue)
     }
 
     /// Draw a specific area, or the entire layer if the area is nil.
@@ -46,11 +46,11 @@ class Renderer {
             assertionFailure("Trying to draw in empty rect")
             return
         }
-        for line in rect.minLine ... rect.maxLine {
-            for column in rect.minColumn ... rect.maxColumn {
-                let position = Position(column: column, line: line)
+        for line in rect.minLine.intValue ... rect.maxLine.intValue {
+            for column in rect.minColumn.intValue ... rect.maxColumn.intValue {
+                let position = Position(column: Extended(column), line: Extended(line))
                 if let cell = layer.cell(at: position) {
-                    drawPixel(cell, at: Position(column: column, line: line))
+                    drawPixel(cell, at: Position(column: Extended(column), line: Extended(line)))
                 }
             }
         }
@@ -65,8 +65,8 @@ class Renderer {
         guard position.column >= 0, position.line >= 0, position.column < layer.frame.size.width, position.line < layer.frame.size.height else {
             return
         }
-        if cache[position.line][position.column] != cell {
-            cache[position.line][position.column] = cell
+        if cache[position.line.intValue][position.column.intValue] != cell {
+            cache[position.line.intValue][position.column.intValue] = cell
             if self.currentPosition != position {
                 write(EscapeSequence.moveTo(position))
                 self.currentPosition = position

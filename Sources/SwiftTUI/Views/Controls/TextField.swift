@@ -28,7 +28,7 @@ public struct TextField: View, PrimitiveView {
         }
 
         override func size(proposedSize: Size) -> Size {
-            return Size(width: text.count + 1, height: 1)
+            return Size(width: Extended(text.count) + 1, height: 1)
         }
 
         override func handleEvent(_ char: Character) {
@@ -53,9 +53,9 @@ public struct TextField: View, PrimitiveView {
 
         override func cell(at position: Position) -> Cell? {
             guard position.line == 0 else { return nil }
-            if position.column == text.count, isFirstResponder { return Cell(char: "_") }
-            guard position.column < text.count else { return .init(char: " ") }
-            return Cell(char: text[text.index(text.startIndex, offsetBy: position.column)])
+            if position.column == Extended(text.count), isFirstResponder { return Cell(char: "_") }
+            guard position.column < Extended(text.count) else { return .init(char: " ") }
+            return Cell(char: text[text.index(text.startIndex, offsetBy: position.column.intValue)])
         }
 
         override var selectable: Bool { true }
