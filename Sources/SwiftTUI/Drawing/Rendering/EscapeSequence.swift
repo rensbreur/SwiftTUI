@@ -29,6 +29,14 @@ enum EscapeSequence {
         "\u{1b}[48;2;\(red);\(green);\(blue)m"
     }
 
+    static func setForegroundColor(xterm: Int) -> String {
+        "\u{1b}[38;5;\(xterm)m"
+    }
+
+    static func setBackgroundColor(xterm: Int) -> String {
+        "\u{1b}[48;5;\(xterm)m"
+    }
+
     static let enableBold = "\u{1b}[1m"
     static let disableBold = "\u{1b}[22m"
 
