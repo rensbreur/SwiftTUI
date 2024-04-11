@@ -38,7 +38,9 @@ public struct GeometryReader<Content: View>: View, PrimitiveView {
         override func layout(size: Size) {
             super.layout(size: size)
             self.children[0].layout(size: size)
-            geometry.wrappedValue = size
+            if geometry.wrappedValue != size {
+                geometry.wrappedValue = size
+            }
         }
     }
 }
