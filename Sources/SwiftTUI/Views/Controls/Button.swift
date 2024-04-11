@@ -1,42 +1,50 @@
 import Foundation
 
-public struct Button: View, PrimitiveView {
-    public let n: String
-    public let action: () -> Void
+public struct Button<Label: View>: View, PrimitiveView {
+    let label: VStack<Label>
+    let action: () -> Void
 
-    public init(_ text: String, action: @escaping () -> Void) {
-        self.n = text
+    public init(action: @escaping () -> Void, label: () -> Label) {
+        self.label = VStack(content: label())
+        self.action = action
+    }
+
+    public init(_ text: String, action: @escaping () -> Void) where Label == Text {
+        self.label = VStack(content: Text(text))
         self.action = action
     }
 
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
-        node.control = ButtonControl(text: n, action: action)
+        node.addNode(at: 0, Node(view: label.view))
+        let control = ButtonControl(action: action)
+        control.label = node.children[0].control(at: 0)
+        control.addSubview(control.label, at: 0)
+        node.control = control
     }
 
     func updateNode(_ node: Node) {
-        let last = node.view as! Self
         node.view = self
-        if self.n != last.n {
-            let control = node.control as! ButtonControl
-            control.text = n
-            control.layer.invalidate()
-        }
+        node.children[0].update(using: label.view)
     }
 
     private class ButtonControl: Control {
-        var text: String
-
         var action: () -> Void
+        var label: Control!
+        weak var buttonLayer: ButtonLayer?
 
-        init(text: String, action: @escaping () -> Void) {
-            self.text = text
+        init(action: @escaping () -> Void) {
             self.action = action
         }
 
         override func size(proposedSize: Size) -> Size {
-            return Size(width: Extended(text.count), height: 1)
+            return label.size(proposedSize: proposedSize)
+        }
+
+        override func layout(size: Size) {
+            super.layout(size: size)
+            self.label.layout(size: size)
         }
 
         override func handleEvent(_ char: Character) {
@@ -45,25 +53,36 @@ public struct Button: View, PrimitiveView {
             }
         }
 
-        override func cell(at position: Position) -> Cell? {
-            guard position.line == 0 else { return nil }
-            guard position.column < Extended(text.count) else { return .init(char: " ") }
-            return Cell(
-                char: text[text.index(text.startIndex, offsetBy: position.column.intValue)],
-                attributes: CellAttributes(inverted: isFirstResponder)
-            )
-        }
-
         override var selectable: Bool { true }
 
         override func becomeFirstResponder() {
             super.becomeFirstResponder()
+            buttonLayer?.highlighted = true
             layer.invalidate()
         }
 
         override func resignFirstResponder() {
             super.resignFirstResponder()
+            buttonLayer?.highlighted = false
             layer.invalidate()
+        }
+
+        override func makeLayer() -> Layer {
+            let layer = ButtonLayer()
+            self.buttonLayer = layer
+            return layer
+        }
+    }
+
+    private class ButtonLayer: Layer {
+        var highlighted = false
+
+        override func cell(at position: Position) -> Cell? {
+            var cell = super.cell(at: position)
+            if highlighted {
+                cell?.attributes.inverted.toggle()
+            }
+            return cell
         }
     }
 }
