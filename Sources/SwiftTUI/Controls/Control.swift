@@ -21,9 +21,9 @@ class Control: LayerDrawing {
         for i in index ..< children.count {
             children[i].index = i
         }
-        if root.window?.firstResponder == nil {
+        if let window = root.window, window.firstResponder == nil {
             if let responder = view.firstSelectableElement {
-                root.window?.firstResponder = responder
+                window.firstResponder = responder
                 responder.becomeFirstResponder()
             }
         }
