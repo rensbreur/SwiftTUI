@@ -26,8 +26,8 @@ private struct SetEnvironment<Content: View, T>: View, PrimitiveView {
 
     func updateNode(_ node: Node) {
         node.view = self
-        node.children[0].update(using: content.view)
         node.environment = { $0[keyPath: keyPath] = value }
+        node.children[0].update(using: content.view)
     }
 
 }
