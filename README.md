@@ -57,11 +57,11 @@ This is a flag editor, which you will agree to if you come from a country which 
 
 Are you working on a project that's using SwiftTUI? Get in touch with me if you'd like to have it featured here.
 
-#### soundcld
+#### [soundcld](https://github.com/rensbreur/soundcld)
 
-![](showcase_screenshot.png)
+![](https://github.com/rensbreur/SwiftTUI/assets/13484323/b585708c-3606-495e-a96e-3eba92f39916)
 
-This is a TUI application for SoundCloud. It's not (yet) available publicly.
+This is a TUI application for SoundCloud.
 
 ### More
 
