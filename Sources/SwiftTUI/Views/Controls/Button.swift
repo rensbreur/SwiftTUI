@@ -4,7 +4,7 @@ public struct Button<Label: View>: View, PrimitiveView {
     let label: VStack<Label>
     let action: () -> Void
 
-    public init(action: @escaping () -> Void, label: () -> Label) {
+    public init(action: @escaping () -> Void, @ViewBuilder label: () -> Label) {
         self.label = VStack(content: label())
         self.action = action
     }
