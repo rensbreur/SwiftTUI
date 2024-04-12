@@ -6,7 +6,7 @@ import Foundation
 /// ```
 /// tail -f /tmp/swift_tui_log
 /// ```
-func log(_ item: Any, terminator: String = "\n") {
+public func log(_ item: Any, terminator: String = "\n") {
     print(item, terminator: terminator, to: &logStream)
 }
 
