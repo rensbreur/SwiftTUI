@@ -62,7 +62,8 @@ public struct VStack<Content: View>: View, PrimitiveView, LayoutRootView {
             var size: Size = .zero
             var remainingItems = children.count
             for control in children.sorted(by: { $0.verticalFlexibility(width: proposedSize.width) < $1.verticalFlexibility(width: proposedSize.width) }) {
-                let childSize = control.size(proposedSize: Size(width: proposedSize.width, height: (proposedSize.height - size.height) / Extended(remainingItems)))
+                let remainingHeight = size.height == .infinity ? .infinity : (proposedSize.height - size.height)
+                let childSize = control.size(proposedSize: Size(width: proposedSize.width, height: remainingHeight / Extended(remainingItems)))
                 size.height += childSize.height
                 if remainingItems > 1 {
                     size.height += spacing
