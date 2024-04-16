@@ -62,7 +62,19 @@ public struct Color: Hashable {
     public static var yellow: Color { .ansi(.yellow) }
     public static var blue: Color { .ansi(.blue) }
     public static var magenta: Color { .ansi(.magenta) }
+    public static var cyan: Color { .ansi(.cyan) }
     public static var white: Color { .ansi(.white) }
+
+    public static var brightBlack: Color { .ansi(.brightBlack) }
+    public static var brightRed: Color { .ansi(.brightRed) }
+    public static var brightGreen: Color { .ansi(.brightGreen) }
+    public static var brightYellow: Color { .ansi(.brightYellow) }
+    public static var brightBlue: Color { .ansi(.brightBlue) }
+    public static var brightMagenta: Color { .ansi(.brightMagenta) }
+    public static var brightCyan: Color { .ansi(.brightCyan) }
+    public static var brightWhite: Color { .ansi(.brightWhite) }
+
+    public static var gray: Color { .brightBlack }
 }
 
 struct ANSIColor: Hashable {
@@ -79,6 +91,15 @@ struct ANSIColor: Hashable {
     static var magenta: ANSIColor { ANSIColor(foregroundCode: 35, backgroundCode: 45) }
     static var cyan: ANSIColor { ANSIColor(foregroundCode: 36, backgroundCode: 46) }
     static var white: ANSIColor { ANSIColor(foregroundCode: 37, backgroundCode: 47) }
+
+    static var brightBlack: ANSIColor { ANSIColor(foregroundCode: 90, backgroundCode: 100) }
+    static var brightRed: ANSIColor { ANSIColor(foregroundCode: 91, backgroundCode: 101) }
+    static var brightGreen: ANSIColor { ANSIColor(foregroundCode: 92, backgroundCode: 102) }
+    static var brightYellow: ANSIColor { ANSIColor(foregroundCode: 93, backgroundCode: 103) }
+    static var brightBlue: ANSIColor { ANSIColor(foregroundCode: 94, backgroundCode: 104) }
+    static var brightMagenta: ANSIColor { ANSIColor(foregroundCode: 95, backgroundCode: 105) }
+    static var brightCyan: ANSIColor { ANSIColor(foregroundCode: 96, backgroundCode: 106) }
+    static var brightWhite: ANSIColor { ANSIColor(foregroundCode: 97, backgroundCode: 107) }
 }
 
 struct XTermColor: Hashable {
