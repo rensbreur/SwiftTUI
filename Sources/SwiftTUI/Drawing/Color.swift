@@ -73,6 +73,8 @@ public struct Color: Hashable {
     public static var brightMagenta: Color { .ansi(.brightMagenta) }
     public static var brightCyan: Color { .ansi(.brightCyan) }
     public static var brightWhite: Color { .ansi(.brightWhite) }
+
+    public static var gray: Color { .brightBlack }
 }
 
 struct ANSIColor: Hashable {
