@@ -62,6 +62,7 @@ public struct Color: Hashable {
     public static var yellow: Color { .ansi(.yellow) }
     public static var blue: Color { .ansi(.blue) }
     public static var magenta: Color { .ansi(.magenta) }
+    public static var cyan: Color { .ansi(.cyan) }
     public static var white: Color { .ansi(.white) }
 }
 
