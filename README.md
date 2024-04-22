@@ -14,12 +14,15 @@ SwiftTUI brings SwiftUI to the terminal. It provides an API similar to SwiftUI t
 
 Many features from SwiftUI are already working:
 
-✓ Property wrappers `@State`, `@Binding`, `@Environment`<br>
-✓ `VStack`, `HStack`, `ForEach`, `Group` and `@ViewBuilder`<br>
+✓ Property wrappers `@State`, `@Binding`, `@Environment` and `@ObservedObject`<br>
+✓ Stacks, `.frame()`, `.padding()`, `GeometryReader`, `@ViewBuilder`, `ForEach`, `Group`<br>
 ✓ Structural identity like in SwiftUI<br>
+✓ Scrollable lists with `ScrollView`<br>
 ✓ `Button`, `TextField` and moving focus with the arrow keys<br>
-✓ `Text`, `Color`, `Spacer`<br>
-✓ Modifiers `.border()`, `.padding()`, `.background()`, `.foregroundColor()`, applied to all views in a collection like in SwiftUI
+✓ `Color` with ANSI, xterm and TrueColor support<br>
+✓ `Text` with bold, italic, underscore and strikethrough variants<br>
+✓ `.onAppear()`, `.border()`, `.foregroundColor()`, `.backgroundColor`<br>
+✓ Modifiers applied to all views in a collection like in SwiftUI
 
 ### Getting started
 
@@ -36,6 +39,14 @@ struct MyTerminalView: View {
 
 Application(rootView: MyTerminalView()).start()
 ```
+
+To run your app, change to your package's directory and run it from the terminal:
+
+```
+swift run
+```
+
+For more, and to see the supported functionality, check out the [documentation](https://rensbreur.github.io/SwiftTUI/documentation/swifttui/).
 
 ### Examples
 
@@ -57,17 +68,21 @@ This is a flag editor, which you will agree to if you come from a country which 
 
 Are you working on a project that's using SwiftTUI? Get in touch with me if you'd like to have it featured here.
 
-#### [soundcld](https://github.com/rensbreur/soundcld)
+#### soundcld
 
 ![](https://github.com/rensbreur/SwiftTUI/assets/13484323/b585708c-3606-495e-a96e-3eba92f39916)
 
-This is a TUI application for SoundCloud.
+This is a TUI application for SoundCloud. It's not (yet) available publicly.
 
 ### More
 
 See a screen recording of SwiftTUI [in action](https://www.reddit.com/r/SwiftUI/comments/wlabyn/im_making_a_version_of_swiftui_for_terminal/) on Reddit.
 
 Learn how [the diffing works](https://rensbr.eu/blog/swiftui-diffing/) on my blog.
+
+### Documentation
+
+You can find generated documentation [here](https://rensbreur.github.io/SwiftTUI/documentation/swifttui/).
 
 ### Contributing
 
