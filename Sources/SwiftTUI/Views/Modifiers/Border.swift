@@ -7,14 +7,14 @@ public extension View {
 }
 
 public struct BorderStyle: Equatable {
-    public let topLeft: Character
-    public let top: Character
-    public let topRight: Character
-    public let left: Character
-    public let right: Character
-    public let bottomLeft: Character
-    public let bottom: Character
-    public let bottomRight: Character
+    let topLeft: Character
+    let top: Character
+    let topRight: Character
+    let left: Character
+    let right: Character
+    let bottomLeft: Character
+    let bottom: Character
+    let bottomRight: Character
 
     public init(topLeft: Character, top: Character, topRight: Character, left: Character, right: Character, bottomLeft: Character, bottom: Character, bottomRight: Character) {
         self.topLeft = topLeft
@@ -38,18 +38,34 @@ public struct BorderStyle: Equatable {
         self.bottomRight = bottomRight
     }
 
+    /// ```
+    /// ┌──┐
+    /// └──┘
+    /// ```
     public static var `default`: BorderStyle {
         BorderStyle(topLeft: "┌", topRight: "┐", bottomLeft: "└", bottomRight: "┘", horizontal: "─", vertical: "│")
     }
 
+    /// ```
+    /// ╭──╮
+    /// ╰──╯
+    /// ```
     public static var rounded: BorderStyle {
         BorderStyle(topLeft: "╭", topRight: "╮", bottomLeft: "╰", bottomRight: "╯", horizontal: "─", vertical: "│")
     }
 
+    /// ```
+    /// ┏━━┓
+    /// ┗━━┛
+    /// ```
     public static var heavy: BorderStyle {
         BorderStyle(topLeft: "┏", topRight: "┓", bottomLeft: "┗", bottomRight: "┛", horizontal: "━", vertical: "┃")
     }
 
+    /// ```
+    /// ╔══╗
+    /// ╚══╝
+    /// ```
     public static var double: BorderStyle {
         BorderStyle(topLeft: "╔", topRight: "╗", bottomLeft: "╚", bottomRight: "╝", horizontal: "═", vertical: "║")
     }

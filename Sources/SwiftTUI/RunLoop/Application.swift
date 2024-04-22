@@ -38,11 +38,12 @@ public class Application {
     var stdInSource: DispatchSourceRead?
 
     public enum RunLoopType {
-        /// Use Dispatch for the main run loop.
+        /// The default option, using Dispatch for the main run loop.
         case dispatch
 
-        /// This creates and runs an NSApplication so that you can open NSWindows running
-        /// simultaneously to the terminal app. This requires macOS and AppKit.
+        /// This creates and runs an NSApplication with an associated run loop. This allows you
+        /// e.g. to open NSWindows running simultaneously to the terminal app. This requires macOS
+        /// and AppKit.
         case cocoa
     }
 

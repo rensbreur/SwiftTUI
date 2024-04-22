@@ -1,5 +1,7 @@
 import Foundation
 
+/// Automatically scrolls to the currently active control. The content needs to contain controls
+/// such as buttons to scroll to.
 public struct ScrollView<Content: View>: View, PrimitiveView {
     let content: VStack<Content>
 

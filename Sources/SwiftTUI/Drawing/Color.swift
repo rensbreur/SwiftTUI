@@ -1,5 +1,12 @@
 import Foundation
 
+/// Colors can be used as views. Certain modifiers and views may also take colors as parameters.
+///
+/// There are different types of colors that can be used, but not all of them are supported by all
+/// terminal emulators.
+///
+/// The named colors are ANSI colors. In many terminal emulators they are user-defined or part of a
+/// theme, and bold text automatically uses the bright color variant.
 public struct Color: Hashable {
     private let data: Data
 
@@ -17,17 +24,19 @@ public struct Color: Hashable {
         Color(data: .ansi(color))
     }
 
-    /// RGB values must lie between 0 and 5
+    /// A low-resolution color from a 6 by 6 by 6 color cube. The red, green and blue components
+    /// must be numbers between 0 and 5.
     public static func xterm(red: Int, green: Int, blue: Int) -> Color {
         Color(data: .xterm(.color(red: red, green: green, blue: blue)))
     }
 
-    /// White value must lie between 0 and 23
+    /// A grayscale color with white value between 0 and 23.
     public static func xterm(white: Int) -> Color {
         Color(data: .xterm(.grayscale(white: white)))
     }
 
-    /// RGB values must lie between 0 and 255. Not all terminals support this.
+    /// A 24-bit color value. The red, green and blue components must be numbers between 0 and 255.
+    /// Not all terminals support this.
     public static func trueColor(red: Int, green: Int, blue: Int) -> Color {
         Color(data: .trueColor(TrueColor(red: red, green: green, blue: blue)))
     }

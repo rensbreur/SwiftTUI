@@ -1,6 +1,8 @@
 import Foundation
 
 public extension View {
+    /// Aligns content to the top leading corner by default. Use the `.infinity` value for
+    /// `maxWidth` or `maxHeight` to allow views to take up all space.
     func frame(
         minWidth: Extended? = nil,
         maxWidth: Extended? = nil,

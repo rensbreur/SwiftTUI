@@ -5,6 +5,7 @@ public struct VStack<Content: View>: View, PrimitiveView, LayoutRootView {
     let alignment: HorizontalAlignment
     let spacing: Extended?
 
+    /// Horizontally aligns content to the leading edge by default.
     public init(alignment: HorizontalAlignment = .leading, spacing: Extended? = nil, @ViewBuilder _ content: () -> Content) {
         self.content = content()
         self.alignment = alignment

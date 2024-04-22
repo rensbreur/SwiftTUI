@@ -4,6 +4,7 @@ public struct ZStack<Content: View>: View, PrimitiveView, LayoutRootView {
     public let content: Content
     let alignment: Alignment
     
+    // Aligns content to the top leading corner by default.
     public init(alignment: Alignment = .topLeading, @ViewBuilder _ content: () -> Content) {
         self.content = content()
         self.alignment = alignment

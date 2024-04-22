@@ -1,6 +1,7 @@
 import Foundation
 
 public extension View {
+    // Aligns content to the top leading corner by default.
     func frame(width: Extended? = nil, height: Extended? = nil, alignment: Alignment = .topLeading) -> some View {
         FixedFrame(content: self, width: width, height: height, alignment: alignment)
     }

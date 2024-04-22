@@ -1,8 +1,9 @@
 import Foundation
 
-/// To enable logging, create an empty file under `/tmp/swift_tui_log`.
+/// To enable logging, create an empty file under `/tmp/swift_tui_log`. Logging will append to the
+/// end of this file.
 ///
-/// You can then also monitor the log live:
+/// You can monitor the log live using:
 /// ```
 /// tail -f /tmp/swift_tui_log
 /// ```

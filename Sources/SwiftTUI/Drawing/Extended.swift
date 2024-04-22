@@ -1,6 +1,7 @@
 import Foundation
 
-/// Integer type extended with an infinite value.
+/// `Int` extended with infinity values, used by certain modifiers such as `.frame(maxWidth:)` to
+/// allow views taking up all necessary space.
 public struct Extended: Equatable {
     fileprivate let data: Data
 
