@@ -47,7 +47,8 @@ public class Application {
         case cocoa
     }
 
-    public func start() {
+    @MainActor
+    public func startInBackground() {
         setInputMode()
         updateWindowSize()
         control.layout(size: window.layer.frame.size)
@@ -66,6 +67,11 @@ public class Application {
         let sigIntSource = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
         sigIntSource.setEventHandler(qos: .default, flags: [], handler: self.stop)
         sigIntSource.resume()
+    }
+
+    @MainActor
+    public func start() {
+        startInBackground()
 
         switch runLoopType {
         case .dispatch:
