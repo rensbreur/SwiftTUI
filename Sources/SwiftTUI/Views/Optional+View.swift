@@ -33,6 +33,6 @@ extension Optional: View, PrimitiveView, GenericView, OptionalView where Wrapped
 /// We can use this non-generic protocol to check if a view is optional or not.
 ///
 /// In particular, when checking if a view is of a particular type (e.g. a layout root) using
-/// Swift's `is` or `as?`, optional views can be implicitely unwrapped, so we explicitely need to
+/// Swift's `is` or `as?`, optional views can be implicitly unwrapped, so we explicitly need to
 /// make sure the view is not optional.
 protocol OptionalView {}
