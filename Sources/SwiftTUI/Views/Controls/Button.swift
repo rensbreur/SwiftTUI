@@ -48,7 +48,7 @@ public struct Button<Label: View>: View, PrimitiveView {
         }
 
         override func handleEvent(_ char: Character) {
-            if char == "\n" || char == " " {
+            if char == "\n" || char == "\r" || char == " " {
                 action()
             }
         }
