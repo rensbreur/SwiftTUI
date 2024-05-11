@@ -8,6 +8,10 @@ public extension View {
     func padding(_ length: Extended) -> some View {
         return Padding(content: self, edges: .all, length: length)
     }
+  
+    func padding(_ edges: Edges = .all, _ length: Int) -> some View {
+        return Padding(content: self, edges: edges, length: .init(length))
+    }
 }
 
 private struct Padding<Content: View>: View, PrimitiveView, ModifierView {
