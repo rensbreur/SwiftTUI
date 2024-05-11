@@ -23,7 +23,25 @@ struct MyTerminalView: View {
 Add the following to `main.swift` to start the terminal application using one of your views as the root view.
 
 ```swift
-Application(rootView: MyTerminalView()).start()
+Application(
+  rootView: MyTerminalView()
+)
+.start()
+```
+or, if you prefer, you can use the `@main` for your project. To do so, create a file, let's say `MyApplication.swift` and give to it an initial point, which is going to be our `@main` struct:
+
+```swift
+import SwiftTUI
+
+@main
+struct MyApplication {
+  static func main() {
+    Application(
+      rootView: MyTerminalView()
+    )
+    .start()
+  }
+}
 ```
 
 To run the app, open a terminal emulator such as macOS's Terminal app, change to your package's directory and run
@@ -52,6 +70,7 @@ swift run
 - ``HStack``
 - ``ZStack``
 - ``Spacer``
+- ``Divider``
 - ``View/frame(width:height:alignment:)``
 - ``View/frame(minWidth:maxWidth:minHeight:maxHeight:alignment:)``
 - ``View/padding(_:)``
@@ -71,6 +90,7 @@ swift run
 - ``View/background(_:)``
 - ``View/border(_:style:)``
 - ``BorderStyle``
+- ``DividerStyle``
 
 ### Text
 
