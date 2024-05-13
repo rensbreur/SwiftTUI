@@ -4,6 +4,10 @@ public extension View {
     func border(_ color: Color? = nil, style: BorderStyle = .default) -> some View {
         return Border(content: self, color: color, style: style)
     }
+  
+    func border(_ style: BorderStyle = .default) -> some View {
+        Border(content: self, color: nil, style: style)
+    }
 }
 
 public struct BorderStyle: Equatable {

@@ -8,7 +8,7 @@ This generated documentation can serve as a reference for the currently supporte
 
 ## Getting started
 
-Create an executable type Swift package and add SwiftTUI as a dependency. Use the `main` branch to use the latest functions. Import SwiftTUI in your files, and write your views like you're used to in SwiftUI, using the supported views and modifiers. 
+Create an executable type Swift package and add SwiftTUI as a dependency. Use the `main` branch to use the latest functions. Import SwiftTUI in your files, and write your views like you're used to in SwiftUI, using the supported views and modifiers.
 
 ```swift
 import SwiftTUI
@@ -23,7 +23,10 @@ struct MyTerminalView: View {
 Add the following to `main.swift` to start the terminal application using one of your views as the root view.
 
 ```swift
-Application(rootView: MyTerminalView()).start()
+Application(
+  rootView: MyTerminalView()
+)
+.start()
 ```
 
 To run the app, open a terminal emulator such as macOS's Terminal app, change to your package's directory and run
@@ -52,6 +55,7 @@ swift run
 - ``HStack``
 - ``ZStack``
 - ``Spacer``
+- ``Divider``
 - ``View/frame(width:height:alignment:)``
 - ``View/frame(minWidth:maxWidth:minHeight:maxHeight:alignment:)``
 - ``View/padding(_:)``
@@ -71,6 +75,7 @@ swift run
 - ``View/background(_:)``
 - ``View/border(_:style:)``
 - ``BorderStyle``
+- ``DividerStyle``
 
 ### Text
 
@@ -104,4 +109,3 @@ swift run
 ### Debugging
 
 - ``log(_:terminator:)``
-
