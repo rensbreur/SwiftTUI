@@ -8,7 +8,7 @@ This generated documentation can serve as a reference for the currently supporte
 
 ## Getting started
 
-Create an executable type Swift package and add SwiftTUI as a dependency. Use the `main` branch to use the latest functions. Import SwiftTUI in your files, and write your views like you're used to in SwiftUI, using the supported views and modifiers. 
+Create an executable type Swift package and add SwiftTUI as a dependency. Use the `main` branch to use the latest functions. Import SwiftTUI in your files, and write your views like you're used to in SwiftUI, using the supported views and modifiers.
 
 ```swift
 import SwiftTUI
@@ -27,21 +27,6 @@ Application(
   rootView: MyTerminalView()
 )
 .start()
-```
-or, if you prefer, you can use the `@main` for your project. To do so, create a file, let's say `MyApplication.swift` and give to it an initial point, which is going to be our `@main` struct:
-
-```swift
-import SwiftTUI
-
-@main
-struct MyApplication {
-  static func main() {
-    Application(
-      rootView: MyTerminalView()
-    )
-    .start()
-  }
-}
 ```
 
 To run the app, open a terminal emulator such as macOS's Terminal app, change to your package's directory and run
@@ -124,4 +109,3 @@ swift run
 ### Debugging
 
 - ``log(_:terminator:)``
-
