@@ -29,7 +29,7 @@ final class Node {
     /// For modifiers only, references to the controls
     var controls: WeakSet<Control>?
 
-    private(set) var parent: Node?
+    private(set) weak var parent: Node?
     private(set) var children: [Node] = []
 
     private(set) var index: Int = 0
