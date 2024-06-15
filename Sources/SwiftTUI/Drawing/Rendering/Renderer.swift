@@ -1,5 +1,16 @@
 import Foundation
 
+#if os(Linux)
+import Glibc
+#else
+import Darwin
+#endif
+
+private let systemWrite = write
+@Sendable internal func systemWriteString(_ string: String) {
+    string.withCString { _ = systemWrite(STDOUT_FILENO, $0, strlen($0)) }
+}
+
 class Renderer {
     var layer: Layer
 
@@ -15,13 +26,16 @@ class Renderer {
 
     private var currentForegroundColor: Color? = nil
     private var currentBackgroundColor: Color? = nil
+    let writeCallback: @Sendable (String) -> Void
 
     private var currentAttributes = CellAttributes()
 
     weak var application: Application?
 
-    init(layer: Layer) {
+    init(layer: Layer, writeCallback: @escaping @Sendable (String) -> Void) {
         self.layer = layer
+        self.writeCallback = writeCallback
+
         setCache()
         setup()
     }
@@ -117,8 +131,7 @@ class Renderer {
         currentAttributes = attributes
     }
 
-}
-
-private func write(_ str: String) {
-    str.withCString { _ = write(STDOUT_FILENO, $0, strlen($0)) }
+    private func write(_ string: String) {
+        writeCallback(string)
+    }
 }
