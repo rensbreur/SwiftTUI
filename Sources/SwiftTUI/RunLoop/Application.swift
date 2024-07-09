@@ -1,5 +1,7 @@
 import Foundation
+#if os(macOS)
 import AppKit
+#endif
 
 public class Application {
     private let node: Node
@@ -41,10 +43,12 @@ public class Application {
         /// The default option, using Dispatch for the main run loop.
         case dispatch
 
+        #if os(macOS)
         /// This creates and runs an NSApplication with an associated run loop. This allows you
         /// e.g. to open NSWindows running simultaneously to the terminal app. This requires macOS
         /// and AppKit.
         case cocoa
+        #endif
     }
 
     public func start() {
@@ -70,9 +74,11 @@ public class Application {
         switch runLoopType {
         case .dispatch:
             dispatchMain()
+        #if os(macOS)
         case .cocoa:
             NSApplication.shared.setActivationPolicy(.accessory)
             NSApplication.shared.run()
+        #endif
         }
     }
 
