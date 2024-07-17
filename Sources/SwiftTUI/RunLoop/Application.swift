@@ -16,7 +16,18 @@ public class Application {
     private var invalidatedNodes: [Node] = []
     private var updateScheduled = false
 
-    public init<I: View>(rootView: I, runLoopType: RunLoopType = .dispatch) {
+    public convenience init<I: View>(
+        rootView: I,
+        runLoopType: RunLoopType = .dispatch
+    ) {
+        self.init(rootView: rootView, runLoopType: runLoopType, writeCallback: systemWriteString)
+    }
+
+    public init<I: View>(
+        rootView: I,
+        runLoopType: RunLoopType = .dispatch,
+        writeCallback: @escaping @Sendable (String) -> Void
+    ) {
         self.runLoopType = runLoopType
 
         node = Node(view: VStack(content: rootView).view)
@@ -30,7 +41,7 @@ public class Application {
         window.firstResponder = control.firstSelectableElement
         window.firstResponder?.becomeFirstResponder()
 
-        renderer = Renderer(layer: window.layer)
+        renderer = Renderer(layer: window.layer, writeCallback: writeCallback)
         window.layer.renderer = renderer
 
         node.application = self
@@ -51,14 +62,19 @@ public class Application {
         #endif
     }
 
-    public func start() {
+    public func draw() {
         setInputMode()
         updateWindowSize()
         control.layout(size: window.layer.frame.size)
         renderer.draw()
+    }
+
+    @MainActor
+    public func startInBackground() {
+        draw()
 
         let stdInSource = DispatchSource.makeReadSource(fileDescriptor: STDIN_FILENO, queue: .main)
-        stdInSource.setEventHandler(qos: .default, flags: [], handler: self.handleInput)
+        stdInSource.setEventHandler(qos: .default, flags: [], handler: self.handleStandardInput)
         stdInSource.resume()
         self.stdInSource = stdInSource
 
@@ -70,6 +86,11 @@ public class Application {
         let sigIntSource = DispatchSource.makeSignalSource(signal: SIGINT, queue: .main)
         sigIntSource.setEventHandler(qos: .default, flags: [], handler: self.stop)
         sigIntSource.resume()
+    }
+
+    @MainActor
+    public func start() {
+        startInBackground()
 
         switch runLoopType {
         case .dispatch:
@@ -89,9 +110,12 @@ public class Application {
         tcsetattr(STDIN_FILENO, TCSAFLUSH, &tattr);
     }
 
-    private func handleInput() {
+    private func handleStandardInput() {
         let data = FileHandle.standardInput.availableData
+        handleInput(data)
+    }
 
+    public func handleInput(_ data: Data) {
         guard let string = String(data: data, encoding: .utf8) else {
             return
         }
@@ -170,11 +194,15 @@ public class Application {
             assertionFailure("Could not get window size")
             return
         }
-        window.layer.frame.size = Size(width: Extended(Int(size.ws_col)), height: Extended(Int(size.ws_row)))
-        renderer.setCache()
+        changeWindosSize(to: Size(width: Extended(Int(size.ws_col)), height: Extended(Int(size.ws_row))))
     }
 
-    private func stop() {
+    public func changeWindosSize(to size: Size) {
+        window.layer.frame.size = size
+        renderer.setCache()
+    }
+    
+    public func stop() {
         renderer.stop()
         resetInputMode() // Fix for: https://github.com/rensbreur/SwiftTUI/issues/25
         exit(0)
