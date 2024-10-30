@@ -10,10 +10,14 @@ struct ComposedView<I: View>: GenericView {
         #if os(macOS)
         view.setupObservedObjectProperties(node: node)
         #endif
+        if #available(macOS 14.0, *) {
+            view.setupObservableClassProperties(node: node)
+        }
         node.addNode(at: 0, Node(view: view.body.view))
     }
 
     func updateNode(_ node: Node) {
+        log("calling updateNode")
         view.setupStateProperties(node: node)
         view.setupEnvironmentProperties(node: node)
         node.view = self
