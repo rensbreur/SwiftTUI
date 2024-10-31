@@ -129,6 +129,14 @@ public class Application {
                 stop()
             } else {
                 window.firstResponder?.handleEvent(char)
+                
+                // handle input for `onKeyPress` View modifier
+                let onKeyPressControls =  window.controls.flattenAndKeepOnlyOnKeyPressControl()
+                for control in onKeyPressControls {
+                    if control.keyPress == char {
+                        control.action()
+                    }
+                }
             }
         }
     }

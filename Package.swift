@@ -22,5 +22,8 @@ let package = Package(
         .testTarget(
             name: "SwiftTUITests",
             dependencies: ["SwiftTUI"]),
+        .executableTarget(
+            name: "SwiftTUIExample",
+            dependencies: ["SwiftTUI"]),
     ]
 )

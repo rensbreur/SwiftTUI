@@ -121,3 +121,19 @@ class Control: LayerDrawing {
     }
 
 }
+
+// Extension to flatten nested categories
+extension Array where Element == Control {
+    /// Filter out all ``Control``s  except ``OnKeyPressControl`` and recursively flatten into one array.
+    func flattenAndKeepOnlyOnKeyPressControl() -> [OnKeyPressControl] {
+        return self.flatMap { child in
+            let current: [OnKeyPressControl]
+            if child is OnKeyPressControl {
+                current = [child as! OnKeyPressControl]
+            } else {
+                current = []
+            }
+            return current + child.children.flattenAndKeepOnlyOnKeyPressControl()
+        }
+    }
+}
