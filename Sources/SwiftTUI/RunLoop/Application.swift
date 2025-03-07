@@ -3,7 +3,7 @@ import Foundation
 import AppKit
 #endif
 
-public class Application {
+public class Application: @unchecked Sendable {
     private let node: Node
     private let window: Window
     private let control: Control
@@ -51,7 +51,7 @@ public class Application {
         #endif
     }
 
-    public func start() {
+    @MainActor public func start() {
         setInputMode()
         updateWindowSize()
         control.layout(size: window.layer.frame.size)

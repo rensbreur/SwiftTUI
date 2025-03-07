@@ -1,18 +1,18 @@
 import Foundation
 
-public enum VerticalAlignment {
+public enum VerticalAlignment: Sendable {
     case top
     case center
     case bottom
 }
 
-public enum HorizontalAlignment {
+public enum HorizontalAlignment: Sendable {
     case leading
     case center
     case trailing
 }
 
-public struct Alignment {
+public struct Alignment: Sendable {
     public var horizontalAlignment: HorizontalAlignment
     public var verticalAlignment: VerticalAlignment
 

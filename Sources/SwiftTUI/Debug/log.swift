@@ -11,7 +11,7 @@ public func log(_ item: Any, terminator: String = "\n") {
     print(item, terminator: terminator, to: &logStream)
 }
 
-var logStream = LogStream()
+nonisolated(unsafe) var logStream = LogStream()
 
 struct LogStream: TextOutputStream {
     func write(_ string: String) {
