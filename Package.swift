@@ -1,4 +1,4 @@
-// swift-tools-version: 6.0
+// swift-tools-version: 6.2
 
 import PackageDescription
 
@@ -10,10 +10,10 @@ let package = Package(
     products: [
         .library(
             name: "SwiftTUI",
-            targets: ["SwiftTUI"]),
+            targets: ["SwiftTUI"])
     ],
     dependencies: [
-         .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0")
+        .package(url: "https://github.com/apple/swift-docc-plugin", from: "1.0.0")
     ],
     targets: [
         .target(
