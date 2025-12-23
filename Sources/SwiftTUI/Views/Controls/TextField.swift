@@ -5,6 +5,7 @@ public struct TextField: View, PrimitiveView {
     public let action: (String) -> Void
 
     @Environment(\.placeholderColor) private var placeholderColor: Color
+    @Environment(\.textFieldCursorStyle) private var cursorStyle: TextFieldCursorStyle
 
     public init(placeholder: String? = nil, action: @escaping (String) -> Void) {
         self.placeholder = placeholder
@@ -15,25 +16,29 @@ public struct TextField: View, PrimitiveView {
 
     func buildNode(_ node: Node) {
         setupEnvironmentProperties(node: node)
-        node.control = TextFieldControl(placeholder: placeholder ?? "", placeholderColor: placeholderColor, action: action)
+        node.control = TextFieldControl(placeholder: placeholder ?? "", placeholderColor: placeholderColor, cursorStyle: cursorStyle, action: action)
     }
 
     func updateNode(_ node: Node) {
         setupEnvironmentProperties(node: node)
         node.view = self
-        (node.control as! TextFieldControl).action = action
+        let control = node.control as! TextFieldControl
+        control.action = action
+        control.cursorStyle = cursorStyle
     }
 
     private class TextFieldControl: Control {
         var placeholder: String
         var placeholderColor: Color
+        var cursorStyle: TextFieldCursorStyle
         var action: (String) -> Void
 
         var text: String = ""
 
-        init(placeholder: String, placeholderColor: Color, action: @escaping (String) -> Void) {
+        init(placeholder: String, placeholderColor: Color, cursorStyle: TextFieldCursorStyle, action: @escaping (String) -> Void) {
             self.placeholder = placeholder
             self.placeholderColor = placeholderColor
+            self.cursorStyle = cursorStyle
             self.action = action
         }
 
@@ -65,17 +70,26 @@ public struct TextField: View, PrimitiveView {
             guard position.line == 0 else { return nil }
             if text.isEmpty {
                 if position.column.intValue < placeholder.count {
-                    let showUnderline = (position.column.intValue == 0) && isFirstResponder
+                    let showCursor = (position.column.intValue == 0) && isFirstResponder
                     let char = placeholder[placeholder.index(placeholder.startIndex, offsetBy: position.column.intValue)]
                     return Cell(
                         char: char,
                         foregroundColor: placeholderColor,
-                        attributes: CellAttributes(underline: showUnderline)
+                        attributes: cursorStyle == .block
+                            ? CellAttributes(inverted: showCursor)
+                            : CellAttributes(underline: showCursor)
                     )
                 }
                 return .init(char: " ")
             }
-            if position.column.intValue == text.count, isFirstResponder { return Cell(char: " ", attributes: CellAttributes(underline: true)) }
+            if position.column.intValue == text.count, isFirstResponder {
+                return Cell(
+                    char: " ",
+                    attributes: cursorStyle == .block
+                        ? CellAttributes(inverted: true)
+                        : CellAttributes(underline: true)
+                )
+            }
             guard position.column.intValue < text.count else { return .init(char: " ") }
             return Cell(char: text[text.index(text.startIndex, offsetBy: position.column.intValue)])
         }
