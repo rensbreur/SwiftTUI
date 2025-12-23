@@ -8,6 +8,9 @@ class Control: LayerDrawing {
 
     private var index: Int = 0
 
+    // Track the index of the first responder child to restore it after rebuilds
+    private var preferredFirstResponderIndex: Int?
+
     var window: Window?
     private(set) lazy var layer: Layer = makeLayer()
 
@@ -22,6 +25,23 @@ class Control: LayerDrawing {
             children[i].index = i
         }
         if let window = root.window, window.firstResponder == nil {
+            // Try to restore first responder at the preferred index with decrement fallback
+            if let preferredIndex = preferredFirstResponderIndex {
+                var tryIndex = preferredIndex
+                while tryIndex >= 0 && tryIndex < children.count {
+                    if let responder = children[tryIndex].firstSelectableElement {
+                        window.firstResponder = responder
+                        responder.becomeFirstResponder()
+                        preferredFirstResponderIndex = nil  // Clear after use
+                        return
+                    }
+                    tryIndex -= 1
+                }
+                // If we exhausted all indices, clear the preference and fall through
+                preferredFirstResponderIndex = nil
+            }
+
+            // Fallback: use the newly added view's first selectable element
             if let responder = view.firstSelectableElement {
                 window.firstResponder = responder
                 responder.becomeFirstResponder()
@@ -31,6 +51,9 @@ class Control: LayerDrawing {
 
     func removeSubview(at index: Int) {
         if children[index].isFirstResponder || root.window?.firstResponder?.isDescendant(of: children[index]) == true {
+            // Save the index before removing so we can try to restore it later
+            preferredFirstResponderIndex = index
+
             root.window?.firstResponder?.resignFirstResponder()
             root.window?.firstResponder = selectableElement(above: index) ?? selectableElement(below: index)
             root.window?.firstResponder?.becomeFirstResponder()
