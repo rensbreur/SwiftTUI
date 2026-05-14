@@ -4,6 +4,7 @@ public struct Button<Label: View>: View, PrimitiveView {
     let label: VStack<Label>
     let hover: () -> Void
     let action: () -> Void
+    var disabled: Bool = false
 
     public init(action: @escaping () -> Void, hover: @escaping () -> Void = {}, @ViewBuilder label: () -> Label) {
         self.label = VStack(content: label())
@@ -17,11 +18,18 @@ public struct Button<Label: View>: View, PrimitiveView {
         self.hover = hover
     }
 
+    public func disabled(_ isDisabled: Bool) -> Self {
+        var result = self
+        result.disabled = isDisabled
+        return result
+    }
+
     static var size: Int? { 1 }
 
     func buildNode(_ node: Node) {
         node.addNode(at: 0, Node(view: label.view))
         let control = ButtonControl(action: action, hover: hover)
+        control.disabled = disabled
         control.label = node.children[0].control(at: 0)
         control.addSubview(control.label, at: 0)
         node.control = control
@@ -35,6 +43,7 @@ public struct Button<Label: View>: View, PrimitiveView {
     private class ButtonControl: Control {
         var action: () -> Void
         var hover: () -> Void
+        var disabled: Bool = false
         var label: Control!
         weak var buttonLayer: ButtonLayer?
 
@@ -54,7 +63,9 @@ public struct Button<Label: View>: View, PrimitiveView {
 
         override func handleEvent(_ char: Character) {
             if char == "\n" || char == " " {
-                action()
+                if !disabled {
+                    action()
+                }
             }
         }
 
@@ -75,6 +86,7 @@ public struct Button<Label: View>: View, PrimitiveView {
 
         override func makeLayer() -> Layer {
             let layer = ButtonLayer()
+            layer.disabled = self.disabled
             self.buttonLayer = layer
             return layer
         }
@@ -82,9 +94,13 @@ public struct Button<Label: View>: View, PrimitiveView {
 
     private class ButtonLayer: Layer {
         var highlighted = false
+        var disabled = false
 
         override func cell(at position: Position) -> Cell? {
             var cell = super.cell(at: position)
+            if disabled {
+                cell?.foregroundColor = .gray
+            }
             if highlighted {
                 cell?.attributes.inverted.toggle()
             }
