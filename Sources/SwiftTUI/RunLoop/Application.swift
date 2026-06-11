@@ -13,6 +13,12 @@ public class Application {
 
     private var arrowKeyParser = ArrowKeyParser()
 
+    /// When set, the app owns all keyboard input. Each input chunk is decoded
+    /// into `RawKeyEvent`s (keys plus modifiers — arrows, Page keys, Esc,
+    /// printable characters, …) and delivered here, bypassing focus-based key
+    /// handling. See RawKey.swift.
+    public var keyHandler: ((RawKeyEvent) -> Void)?
+
     private var invalidatedNodes: [Node] = []
     private var updateScheduled = false
 
@@ -93,6 +99,14 @@ public class Application {
         let data = FileHandle.standardInput.availableData
 
         guard let string = String(data: data, encoding: .utf8) else {
+            return
+        }
+
+        // A raw key handler takes over input entirely.
+        if let keyHandler {
+            for event in RawKeyParser.parse(string) {
+                keyHandler(event)
+            }
             return
         }
 
@@ -178,6 +192,14 @@ public class Application {
         renderer.stop()
         resetInputMode() // Fix for: https://github.com/rensbreur/SwiftTUI/issues/25
         exit(0)
+    }
+
+    /// Cleanly shuts the application down: restores the terminal (exits the
+    /// alternate screen, shows the cursor, restores cooked mode) and exits 0 —
+    /// exactly what SIGINT/Ctrl-C does. Lets an app quit programmatically,
+    /// e.g. from a `keyHandler` Esc binding.
+    public func quit() {
+        stop()
     }
 
     /// Fix for: https://github.com/rensbreur/SwiftTUI/issues/25
